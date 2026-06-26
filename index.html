@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruby Osborne</title>
+  <meta name="description" content="Ruby Osborne — coming soon." />
+
+  <!-- Open Graph / social preview -->
+  <meta property="og:title" content="Ruby Osborne" />
+  <meta property="og:description" content="Something is being built here." />
+  <meta property="og:type" content="website" />
+
+  <!-- Favicon: a tiny red bracket -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23ff2222'>[</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scanlines" id="scanlines" aria-hidden="true"></div>
+
+  <main class="stage">
+    <div class="glow" id="glow" aria-hidden="true"></div>
+
+    <p class="name" id="name"></p>
+
+    <h1 class="headline">
+      <span class="bracket">[</span><span class="status" id="status"></span><span class="cursor" id="cursor">_</span><span class="bracket">]</span>
+    </h1>
+
+    <p class="tagline" id="tagline"></p>
+
+    <nav class="socials" id="socials"></nav>
+  </main>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="config.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

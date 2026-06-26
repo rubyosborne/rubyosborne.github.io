@@ -1,0 +1,178 @@
+/* Theme tokens are injected as CSS variables from config.js (see main.js).
+   You can also override any of these here directly. */
+:root {
+  --bg: #0a0a0a;
+  --fg: #f5f5f5;
+  --muted: #8a8a8a;
+  --accent: #ff2222;
+  --accent-dim: #7a0d0d;
+  --bracket: #ff2222;
+  --font: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stage {
+  position: relative;
+  text-align: center;
+  padding: 2rem;
+  z-index: 2;
+}
+
+/* Red glow behind the headline */
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60vw;
+  height: 60vw;
+  max-width: 600px;
+  max-height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 65%);
+  filter: blur(40px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: -1;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.65; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.name {
+  color: var(--muted);
+  letter-spacing: 0.45em;
+  font-size: clamp(0.7rem, 2vw, 0.95rem);
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+  padding-left: 0.45em; /* compensate letter-spacing */
+}
+
+.headline {
+  font-size: clamp(2rem, 9vw, 6rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.bracket {
+  color: var(--bracket);
+  font-weight: 800;
+}
+
+.status {
+  color: var(--fg);
+  text-shadow: 0 0 18px rgba(255, 34, 34, 0.25);
+}
+
+.cursor {
+  color: var(--accent);
+  font-weight: 400;
+  margin-left: 0.05em;
+}
+
+.cursor.blink { animation: blink 1.05s step-end infinite; }
+
+@keyframes blink {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: clamp(0.85rem, 2.4vw, 1.1rem);
+  margin-top: 1.8rem;
+  letter-spacing: 0.04em;
+}
+
+.socials {
+  margin-top: 2.6rem;
+  display: flex;
+  gap: 1.6rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.socials a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  padding: 0.4rem 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.socials a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+.socials a:hover { color: var(--fg); }
+.socials a:hover::after { width: 100%; }
+
+.footer {
+  position: fixed;
+  bottom: 1.4rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+/* Optional CRT scanlines overlay (toggled in config) */
+.scanlines {
+  display: none;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0px,
+    rgba(0,0,0,0) 2px,
+    rgba(0,0,0,0.25) 3px,
+    rgba(0,0,0,0.25) 3px
+  );
+}
+.scanlines.on { display: block; }
+
+@media (max-width: 480px) {
+  .headline { gap: 0.05em; }
+  .name { letter-spacing: 0.3em; }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glow, .cursor.blink { animation: none; }
+}
