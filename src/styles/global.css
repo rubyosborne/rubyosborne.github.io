@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  /* Lock the document: this is a fixed scene, never a scrolling page. */
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #0e0c08;
+  color: #f6ead0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The scene owns the whole viewport and never scrolls. */
+.scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  /* Establish a 3D context so layers can sit at depth. */
+  perspective: 1200px;
+  perspective-origin: 50% 42%;
+  touch-action: none; /* we handle touch-drag ourselves */
+  cursor: crosshair;
+}
+
+/* The world is the thing the "gaze" pans. All layers live inside it. */
+.world {
+  position: absolute;
+  inset: -20% 0; /* extra bleed top/bottom so panning never shows an edge */
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* Every parallax layer is a full-bleed absolutely-positioned plane. */
+.layer {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Individual branch groups — GSAP rotates these around their join point. */
+.branch {
+  transform-box: fill-box;
+  will-change: transform;
+}
+
+/* Sky-gap navigation labels */
+.gap-label {
+  position: absolute;
+  z-index: 40;
+  font-family: '"Cormorant Garamond"', Georgia, serif;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform, filter, opacity;
+}
+
+/* The luminous, sunlit treatment — readable first, glowing second. */
+.gap-label .word {
+  display: inline-block;
+  color: #fff7e6;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  /* Stronger dark halo for guaranteed contrast against bright sky + warm glow. */
+  text-shadow:
+    0 2px 4px rgba(8, 6, 3, 0.98),
+    0 0 3px rgba(8, 6, 3, 0.98),
+    0 0 2px rgba(8, 6, 3, 0.98),
+    0 0 18px rgba(240, 192, 116, 0.6),
+    0 0 36px rgba(240, 192, 116, 0.35);
+  transition: filter 0.5s ease, text-shadow 0.5s ease, transform 0.5s ease;
+}
+
+.gap-label:hover .word,
+.gap-label:focus-visible .word,
+.gap-label.is-active .word {
+  filter: brightness(1.25) saturate(1.1);
+  text-shadow:
+    0 1px 2px rgba(10, 8, 4, 0.95),
+    0 0 2px rgba(10, 8, 4, 0.9),
+    0 0 18px rgba(255, 240, 200, 0.9),
+    0 0 44px rgba(240, 192, 116, 0.6);
+}
+
+/* Keyboard focus ring — visible, on-brand, never removed. */
+.gap-label:focus-visible {
+  outline: none;
+}
+.gap-label:focus-visible .word {
+  outline: 2px solid rgba(255, 247, 230, 0.85);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
+.gap-label .sub {
+  display: block;
+  font-size: 0.5em;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.1em;
+}
+
+/* Sun bloom — soft, not a lens-flare cliché. */
+.sun-bloom {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 247, 230, 0.95) 0%,
+    rgba(246, 234, 208, 0.55) 22%,
+    rgba(232, 185, 106, 0.25) 45%,
+    rgba(217, 151, 74, 0) 70%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Hint text fades out after first interaction. */
+.hint {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 50;
+  font-family: '"Cormorant Garamond"', Georgia, serif;
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(246, 234, 208, 0.55);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+
+/* Reduced motion: the scene becomes a calm, static composition. */
+@media (prefers-reduced-motion: reduce) {
+  .hint {
+    display: none;
+  }
+}

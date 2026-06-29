@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+# local depth-map toolchain (large venv; regenerate with tools/README.md)
+tools/depthenv/

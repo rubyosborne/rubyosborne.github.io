@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import Scene from '../components/Scene.astro';
+---
+
+<Base title="Ruby Osborne" description="Lying on the forest floor, looking up into the oak canopy.">
+  <Scene />
+</Base>
+
+<script>
+  import { initForest } from '../scripts/forest3d';
+  initForest();
+</script>

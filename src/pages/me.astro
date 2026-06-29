@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Me · Ruby Osborne">
+  <main class="placeholder">
+    <a class="back" href="/">← back to the canopy</a>
+    <h1>Me</h1>
+    <p>Coming soon.</p>
+  </main>
+</Base>
+
+<style>
+  .placeholder {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: radial-gradient(60vmax 50vmax at 50% 30%, #1c2616 0%, #0e0c08 70%);
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    color: #f6ead0;
+    text-align: center;
+  }
+  h1 {
+    font-size: clamp(3rem, 12vw, 7rem);
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 30px rgba(240, 192, 116, 0.35);
+  }
+  p {
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+  .back {
+    position: absolute;
+    top: 1.6rem;
+    left: 1.6rem;
+    color: #e8b96a;
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    font-size: 1rem;
+  }
+  .back:hover { color: #fff7e6; }
+</style>

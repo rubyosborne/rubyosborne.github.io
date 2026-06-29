@@ -1,0 +1,100 @@
+---
+// The 3D scene renders into <canvas id="forest">. Labels are real DOM text
+// layered above the canvas so they stay readable, focusable, and accessible.
+---
+
+<div class="scene" id="scene" aria-label="An oak canopy seen from the forest floor at golden hour">
+  <canvas id="forest" aria-hidden="true"></canvas>
+
+  <!-- Navigation labels, sitting in sky-gaps above the canvas. -->
+  <a
+    class="gap-label gap-label--left is-quiet"
+    id="labelMe"
+    href="/me"
+    data-side="left"
+    aria-label="Myself — about Ruby Osborne"
+  >
+    <span class="word">Myself</span>
+  </a>
+
+  <a
+    class="gap-label gap-label--right is-quiet"
+    id="labelWork"
+    href="/work"
+    data-side="right"
+    aria-label="My Work — projects by Ruby Osborne"
+  >
+    <span class="word">My Work</span>
+  </a>
+
+  <p class="hint" id="hint">Move to look around the canopy</p>
+
+  <!-- Shown only when no real canopy photo has been added yet. -->
+  <div class="asset-hint" id="assetHint" role="status">
+    <strong>Add your photo</strong> — drop a golden-hour
+    looking-up-into-the-canopy image at <code>public/canopy.jpg</code>
+    (optional: <code>canopy-depth.jpg</code>, <code>floor.jpg</code>).
+    Showing a procedural fallback for now.
+  </div>
+</div>
+
+<style>
+  #forest {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
+
+  /* Both labels sit at the SAME height, flanking the central sky-gap. */
+  .gap-label--left {
+    left: 13%;
+    top: 46%;
+    font-size: clamp(1.9rem, 5.6vw, 3.6rem);
+  }
+  .gap-label--right {
+    right: 13%;
+    top: 46%;
+    font-size: clamp(1.9rem, 5.6vw, 3.6rem);
+    text-align: right;
+  }
+  .is-quiet .word {
+    opacity: 0.96;
+  }
+
+  @media (max-width: 640px) {
+    .gap-label--left { left: 9%; top: 50%; }
+    .gap-label--right { right: 9%; top: 50%; }
+  }
+
+  .asset-hint {
+    position: fixed;
+    left: 50%;
+    top: 18px;
+    transform: translateX(-50%);
+    z-index: 60;
+    display: none;
+    max-width: min(92vw, 640px);
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: rgba(14, 12, 8, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(240, 192, 116, 0.25);
+    color: #f6ead0;
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .asset-hint strong { color: #f0c074; }
+  .asset-hint code {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 12px;
+    color: #e8b96a;
+    background: rgba(240, 192, 116, 0.12);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+</style>
