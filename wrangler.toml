@@ -1,0 +1,13 @@
+# Cloudflare Workers (Git-connected build) config for the static Astro site.
+# The project's deploy command is `npx wrangler deploy`; wrangler runs the
+# [build] hook first (build the Astro site), then deploys ./dist as static
+# assets — no Worker script needed for a purely static site.
+
+name = "rubyosborne"
+compatibility_date = "2026-06-29"
+
+[build]
+command = "npm install && npm run build"
+
+[assets]
+directory = "./dist"
