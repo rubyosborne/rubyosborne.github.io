@@ -12,9 +12,10 @@
     id="labelMe"
     href="/me"
     data-side="left"
-    aria-label="Myself — about Ruby Osborne"
+    aria-label="myself — (n.) the quiet awareness of being the one behind these eyes"
   >
-    <span class="word">Myself</span>
+    <span class="word">myself</span>
+    <span class="def">(n.) the quiet awareness of being the one behind these eyes.</span>
   </a>
 
   <a
@@ -22,9 +23,10 @@
     id="labelWork"
     href="/work"
     data-side="right"
-    aria-label="My Work — projects by Ruby Osborne"
+    aria-label="my work — (n.) proof that the inside can mend a little of the outside"
   >
-    <span class="word">My Work</span>
+    <span class="word">my work</span>
+    <span class="def">(n.) proof that the inside can mend a little of the outside.</span>
   </a>
 
   <p class="hint" id="hint">Move to look around the canopy</p>
@@ -47,25 +49,28 @@
     display: block;
   }
 
-  /* Both labels sit at the SAME height, flanking the central sky-gap. */
+  /* Both entries: SAME height, SAME size, left-aligned text — they match,
+     flanking the central sky-gap. */
   .gap-label--left {
-    left: 13%;
-    top: 46%;
-    font-size: clamp(1.9rem, 5.6vw, 3.6rem);
+    left: 9%;
+    top: 50%;
+    font-size: clamp(2.3rem, 6vw, 4.4rem);
+    text-align: left;
   }
   .gap-label--right {
-    right: 13%;
-    top: 46%;
-    font-size: clamp(1.9rem, 5.6vw, 3.6rem);
-    text-align: right;
+    right: 9%;
+    top: 50%;
+    font-size: clamp(2.3rem, 6vw, 4.4rem);
+    text-align: left;
   }
   .is-quiet .word {
-    opacity: 0.96;
+    opacity: 0.97;
   }
 
+  /* On a narrow screen they stack, still left-aligned and matching. */
   @media (max-width: 640px) {
-    .gap-label--left { left: 9%; top: 50%; }
-    .gap-label--right { right: 9%; top: 50%; }
+    .gap-label--left  { left: 8%; top: 20%; font-size: clamp(2rem, 11vw, 3rem); }
+    .gap-label--right { right: auto; left: 8%; top: 58%; font-size: clamp(2rem, 11vw, 3rem); }
   }
 
   .asset-hint {

@@ -51,62 +51,66 @@ body {
   will-change: transform;
 }
 
-/* Sky-gap navigation labels */
+/* Sky-gap navigation — dictionary entries: lowercase serif word + definition,
+   off-white, slight print grain, NO shadow. */
 .gap-label {
   position: absolute;
   z-index: 40;
   font-family: '"Cormorant Garamond"', Georgia, serif;
-  letter-spacing: 0.14em;
   text-decoration: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   will-change: transform, filter, opacity;
+  /* faint printed-grain texture, blended into the off-white letter fill */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* The luminous, sunlit treatment — readable first, glowing second. */
 .gap-label .word {
-  display: inline-block;
-  color: #fff7e6;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  /* Stronger dark halo for guaranteed contrast against bright sky + warm glow. */
-  text-shadow:
-    0 2px 4px rgba(8, 6, 3, 0.98),
-    0 0 3px rgba(8, 6, 3, 0.98),
-    0 0 2px rgba(8, 6, 3, 0.98),
-    0 0 18px rgba(240, 192, 116, 0.6),
-    0 0 36px rgba(240, 192, 116, 0.35);
-  transition: filter 0.5s ease, text-shadow 0.5s ease, transform 0.5s ease;
+  display: block;
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  text-transform: lowercase;
+  /* off-white fill with the grain blended in; transparent outside the glyphs */
+  color: transparent;
+  background-image: var(--grain), linear-gradient(#f4ede1, #f4ede1);
+  background-blend-mode: soft-light;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: filter 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
 }
 
+.gap-label .def {
+  display: block;
+  margin-top: 0.55em;
+  max-width: 15em;
+  font-size: 0.26em; /* about a quarter of the word height */
+  font-weight: 500;
+  line-height: 1.7; /* relaxed spacing */
+  letter-spacing: 0.045em;
+  text-transform: lowercase;
+  text-align: left;
+  color: transparent;
+  background-image: var(--grain), linear-gradient(#f1ebdf, #f1ebdf);
+  background-blend-mode: soft-light;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: filter 0.5s ease, opacity 0.5s ease;
+}
+
+/* gaze / hover / focus — gentle brighten only, no shadow */
 .gap-label:hover .word,
 .gap-label:focus-visible .word,
-.gap-label.is-active .word {
-  filter: brightness(1.25) saturate(1.1);
-  text-shadow:
-    0 1px 2px rgba(10, 8, 4, 0.95),
-    0 0 2px rgba(10, 8, 4, 0.9),
-    0 0 18px rgba(255, 240, 200, 0.9),
-    0 0 44px rgba(240, 192, 116, 0.6);
-}
+.gap-label.is-active .word { filter: brightness(1.12); }
+.gap-label:hover .def,
+.gap-label:focus-visible .def,
+.gap-label.is-active .def { filter: brightness(1.1); }
 
-/* Keyboard focus ring — visible, on-brand, never removed. */
-.gap-label:focus-visible {
-  outline: none;
-}
+.gap-label:focus-visible { outline: none; }
 .gap-label:focus-visible .word {
-  outline: 2px solid rgba(255, 247, 230, 0.85);
+  outline: 2px solid rgba(244, 237, 225, 0.8);
   outline-offset: 8px;
-  border-radius: 4px;
-}
-
-.gap-label .sub {
-  display: block;
-  font-size: 0.5em;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  opacity: 0.7;
-  margin-top: 0.1em;
 }
 
 /* Sun bloom — soft, not a lens-flare cliché. */
