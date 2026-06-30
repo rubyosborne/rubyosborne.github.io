@@ -14,7 +14,7 @@
     data-side="left"
     aria-label="myself — (n.) the quiet awareness of being the one behind these eyes"
   >
-    <span class="word">myself</span>
+    <span class="head"><span class="word">myself</span><span class="go" aria-hidden="true">→</span></span>
     <span class="def">(n.) the quiet awareness of being the one behind these eyes.</span>
   </a>
 
@@ -25,7 +25,7 @@
     data-side="right"
     aria-label="my work — (n.) proof that the inside can mend a little of the outside"
   >
-    <span class="word">my work</span>
+    <span class="head"><span class="word">my work</span><span class="go" aria-hidden="true">→</span></span>
     <span class="def">(n.) proof that the inside can mend a little of the outside.</span>
   </a>
 
@@ -67,10 +67,16 @@
     opacity: 0.97;
   }
 
-  /* On a narrow screen they stack, still left-aligned and matching. */
+  /* Mobile: a centered vertical stack — both entries horizontally centered on
+     the screen (block centered; text still left-aligned within, so they match). */
   @media (max-width: 640px) {
-    .gap-label--left  { left: 8%; top: 20%; font-size: clamp(2rem, 11vw, 3rem); }
-    .gap-label--right { right: auto; left: 8%; top: 58%; font-size: clamp(2rem, 11vw, 3rem); }
+    .gap-label {
+      left: 50%;
+      right: auto;
+      translate: -50% 0; /* independent of the hover-lift transform */
+    }
+    .gap-label--left  { top: 27%; font-size: clamp(2.2rem, 12vw, 3.2rem); }
+    .gap-label--right { top: 56%; font-size: clamp(2.2rem, 12vw, 3.2rem); }
   }
 
   .asset-hint {

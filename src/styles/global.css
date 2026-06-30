@@ -6,14 +6,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  /* Lock the document: this is a fixed scene, never a scrolling page. */
-  overflow: hidden;
-  overscroll-behavior: none;
   background: #0e0c08;
   color: #f6ead0;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Lock scrolling ONLY on the fixed canopy scene (the landing page). Content
+   pages like /work and /me scroll normally. */
+html:has(.scene),
+html:has(.scene) body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 /* The scene owns the whole viewport and never scrolls. */
@@ -56,17 +61,30 @@ body {
 .gap-label {
   position: absolute;
   z-index: 40;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
   font-family: '"Cormorant Garamond"', Georgia, serif;
   text-decoration: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   will-change: transform, filter, opacity;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   /* faint printed-grain texture, blended into the off-white letter fill */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* word + arrow share one baseline row */
+.gap-label .head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+}
+
 .gap-label .word {
-  display: block;
+  position: relative;
+  display: inline-block;
   font-weight: 500;
   font-size: 1em;
   line-height: 0.95;
@@ -78,7 +96,30 @@ body {
   background-blend-mode: soft-light;
   -webkit-background-clip: text;
   background-clip: text;
-  transition: filter 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+  transition: filter 0.4s ease, opacity 0.5s ease;
+}
+
+/* Underline cue: a short rule at rest signals it's tappable (works on mobile
+   too, where there's no hover); sweeps to full width + brightens on activate. */
+.gap-label .word::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.1em;
+  height: 0.035em;
+  width: 1.1em;
+  background: rgba(250, 249, 245, 0.5);
+  transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.3s ease;
+}
+
+/* Slide-in "go" arrow — a clear button affordance on hover / focus / tap. */
+.gap-label .go {
+  font-size: 0.42em;
+  line-height: 1;
+  color: rgba(252, 251, 247, 0.95);
+  opacity: 0;
+  transform: translateX(-0.35em);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .gap-label .def {
@@ -96,21 +137,46 @@ body {
   background-blend-mode: soft-light;
   -webkit-background-clip: text;
   background-clip: text;
-  transition: filter 0.5s ease, opacity 0.5s ease;
+  transition: filter 0.4s ease, opacity 0.5s ease;
 }
 
-/* gaze / hover / focus — gentle brighten only, no shadow */
+/* Activate (hover / gaze / focus / tap): clearly a button — brighten to pure
+   white, underline sweeps full width, arrow slides in, whole entry lifts. */
+.gap-label:hover,
+.gap-label:focus-visible,
+.gap-label.is-active {
+  transform: translateY(-4px);
+}
 .gap-label:hover .word,
 .gap-label:focus-visible .word,
-.gap-label.is-active .word { filter: brightness(1.12); }
+.gap-label.is-active .word {
+  background-image: var(--grain), linear-gradient(#ffffff, #ffffff);
+  filter: brightness(1.18);
+}
+.gap-label:hover .word::after,
+.gap-label:focus-visible .word::after,
+.gap-label.is-active .word::after {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+}
+.gap-label:hover .go,
+.gap-label:focus-visible .go,
+.gap-label.is-active .go {
+  opacity: 1;
+  transform: translateX(0);
+}
 .gap-label:hover .def,
 .gap-label:focus-visible .def,
-.gap-label.is-active .def { filter: brightness(1.1); }
+.gap-label.is-active .def {
+  background-image: var(--grain), linear-gradient(#ffffff, #ffffff);
+  filter: brightness(1.08);
+}
 
-.gap-label:focus-visible { outline: none; }
-.gap-label:focus-visible .word {
-  outline: 2px solid rgba(244, 237, 225, 0.8);
-  outline-offset: 8px;
+/* Keyboard focus ring — visible for accessibility. */
+.gap-label:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 12px;
+  border-radius: 6px;
 }
 
 /* Sun bloom — soft, not a lens-flare cliché. */

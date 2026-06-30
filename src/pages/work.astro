@@ -1,50 +1,379 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects.js';
+
+const monogram = (n) =>
+  n.replace(/[^A-Za-z ]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+const badgeText = (s) => (s === 'dev' ? 'In development' : 'Discontinued');
+
+// Auto-detect a per-project image: drop /public/projects/<id>.{jpg,png,webp,svg}
+// and it shows automatically (no code change needed).
+const exts = ['jpg', 'jpeg', 'png', 'webp', 'svg'];
+const findImg = (id) => {
+  for (const e of exts) {
+    if (fs.existsSync(path.resolve('public/projects', `${id}.${e}`))) return `/projects/${id}.${e}`;
+  }
+  return null;
+};
+const items = projects.map((p) => ({ ...p, img: findImg(p.id) }));
 ---
 
-<Base title="My Work · Ruby Osborne">
-  <main class="placeholder">
-    <a class="back" href="/">← back to the canopy</a>
-    <h1>My Work</h1>
-    <p>Coming soon.</p>
+<Base title="My Work · Ruby Osborne" description="Projects by Ruby Osborne — finance systems, robotics, products and tools.">
+  <main class="work">
+    <a class="back" href="/">← canopy</a>
+
+    <header class="work-head">
+      <h1>my work</h1>
+      <p class="lede">Things I've built — finance systems, robots, products and tools.</p>
+    </header>
+
+    <ul class="grid" id="grid">
+      {items.map((p) => (
+        <li>
+          <button class="card" type="button" data-id={p.id} aria-label={`Open ${p.name}`}>
+            <span class="media" style={`--accent:${p.accent}`}>
+              {p.img
+                ? <img src={p.img} class={p.logo ? 'logo' : ''} alt="" loading="lazy" />
+                : <span class="mono" aria-hidden="true">{monogram(p.name)}</span>}
+              {p.status && <span class={`badge badge--${p.status}`}>{badgeText(p.status)}</span>}
+            </span>
+            <span class="card-body">
+              <span class="tag">{p.tag}</span>
+              <span class="name">{p.name}</span>
+              <span class="short">{p.short}</span>
+              <span class="cta">View <span class="arrow">→</span></span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
   </main>
+
+  <!-- Expand overlay (one detail per project; the active one animates from its card) -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="backdrop" id="backdrop" data-close></div>
+    <div class="stage">
+      {items.map((p) => (
+        <article class="detail" id={`detail-${p.id}`} hidden>
+          <button class="close" type="button" aria-label="Close" data-close>×</button>
+          <div class="detail-media" style={`--accent:${p.accent}`}>
+            {p.img
+              ? <img src={p.img} class={p.logo ? 'logo' : ''} alt="" />
+              : <span class="mono" aria-hidden="true">{monogram(p.name)}</span>}
+            {p.status && <span class={`badge badge--${p.status}`}>{badgeText(p.status)}</span>}
+          </div>
+          <div class="detail-body">
+            <span class="tag">{p.tag}</span>
+            <h2>{p.name}</h2>
+            <div class="long" set:html={p.long} />
+
+            {p.links && p.links.length > 0 && (
+              <div class="actions">
+                {p.links.map((l) => (
+                  <a class="btn" href={l.href} target="_blank" rel="noopener">{l.label} →</a>
+                ))}
+              </div>
+            )}
+
+            {p.download && (
+              <div class="actions">
+                <a class="btn btn--solid" href={p.download.href} download>{p.download.label} ↓</a>
+              </div>
+            )}
+
+            {p.email && (
+              <form class="subscribe" data-project={p.id} novalidate>
+                <label class="subscribe-label" for={`email-${p.id}`}>Get notified when it opens</label>
+                <div class="subscribe-row">
+                  <input id={`email-${p.id}`} class="subscribe-input" type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
+                  <button class="btn btn--solid" type="submit">Notify me</button>
+                </div>
+                <p class="subscribe-msg" role="status" aria-live="polite"></p>
+              </form>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
 </Base>
 
+<script>
+  import { initProjects } from '../scripts/projects';
+  initProjects();
+</script>
+
 <style>
-  .placeholder {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    background: radial-gradient(60vmax 50vmax at 50% 30%, #1c2616 0%, #0e0c08 70%);
-    font-family: '"Cormorant Garamond"', Georgia, serif;
-    color: #f6ead0;
-    text-align: center;
-  }
-  h1 {
-    font-size: clamp(3rem, 12vw, 7rem);
-    font-weight: 500;
-    margin: 0;
-    letter-spacing: 0.04em;
-    text-shadow: 0 0 30px rgba(240, 192, 116, 0.35);
-  }
-  p {
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    opacity: 0.6;
+  .work {
+    min-height: 100vh;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 5vw, 4rem) clamp(1.2rem, 4vw, 2.5rem) 5rem;
+    color: #efe7da;
   }
   .back {
-    position: absolute;
-    top: 1.6rem;
-    left: 1.6rem;
-    color: #e8b96a;
+    display: inline-block;
+    color: #c9a06a;
     text-decoration: none;
-    letter-spacing: 0.12em;
-    font-size: 1rem;
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 2.5rem;
   }
-  .back:hover { color: #fff7e6; }
+  .back:hover { color: #f3ece0; }
+
+  .work-head { margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .work-head h1 {
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    line-height: 1;
+    margin: 0;
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+  }
+  .lede {
+    margin: 0.9rem 0 0;
+    max-width: 46ch;
+    color: #b6ac9c;
+    font-size: clamp(1rem, 2.4vw, 1.15rem);
+    line-height: 1.6;
+  }
+
+  /* ---- Grid of cards ---- */
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: clamp(1rem, 2.5vw, 1.6rem);
+  }
+  .card {
+    --r: 16px;
+    width: 100%;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(240, 226, 200, 0.1);
+    border-radius: var(--r);
+    overflow: hidden;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s ease, background 0.3s ease;
+    will-change: transform;
+  }
+  .card:hover,
+  .card:focus-visible {
+    transform: translateY(-6px);
+    border-color: rgba(240, 226, 200, 0.28);
+    background: rgba(255, 255, 255, 0.045);
+    outline: none;
+  }
+
+  .media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background:
+      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 75%, #fff 0%), transparent 70%),
+      linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 35%, #0e0c08));
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* logos: contain + breathing room instead of a cropped cover */
+  .media img.logo,
+  .detail-media img.logo { object-fit: contain; padding: 12%; }
+  .mono {
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    color: rgba(255, 255, 255, 0.82);
+    letter-spacing: 0.04em;
+    mix-blend-mode: soft-light;
+    user-select: none;
+  }
+
+  .badge {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.28em 0.7em;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    background: rgba(14, 12, 8, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #f3ece0;
+  }
+  .badge--dev { color: #ffd98a; border-color: rgba(255, 217, 138, 0.4); }
+  .badge--discontinued { color: #d8b6b6; }
+
+  .card-body { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  .tag {
+    font-family: system-ui, sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9c917f;
+  }
+  .name {
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: #f5efe4;
+  }
+  .short {
+    font-family: system-ui, sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: #b1a796;
+  }
+  .cta {
+    margin-top: 0.35rem;
+    font-family: system-ui, sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    color: #c9a06a;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .card:hover .cta .arrow { transform: translateX(4px); }
+  .cta .arrow { transition: transform 0.3s ease; }
+
+  /* ---- Expand overlay ---- */
+  .overlay { position: fixed; inset: 0; z-index: 100; }
+  .overlay[hidden] { display: none; }
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 7, 4, 0.62);
+    backdrop-filter: blur(7px);
+    opacity: 0;
+  }
+  .stage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: clamp(0.8rem, 3vw, 2rem);
+    pointer-events: none;
+  }
+  .detail {
+    pointer-events: auto;
+    position: relative;
+    width: min(760px, 100%);
+    max-height: 88vh;
+    overflow: auto;
+    background: #15120c;
+    border: 1px solid rgba(240, 226, 200, 0.16);
+    border-radius: 20px;
+    will-change: transform, opacity;
+  }
+  .detail[hidden] { display: none; }
+  .close {
+    position: absolute;
+    top: 0.8rem;
+    right: 0.9rem;
+    z-index: 3;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(14, 12, 8, 0.5);
+    backdrop-filter: blur(6px);
+    color: #f3ece0;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .close:hover { background: rgba(40, 34, 24, 0.8); transform: rotate(90deg); }
+
+  .detail-media {
+    position: relative;
+    aspect-ratio: 16 / 8;
+    background:
+      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 75%, #fff 0%), transparent 70%),
+      linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 35%, #0e0c08));
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .detail-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  .detail-body { padding: clamp(1.4rem, 4vw, 2.4rem); }
+  .detail-body h2 {
+    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.05;
+    margin: 0.3rem 0 1.1rem;
+    color: #f6f0e5;
+  }
+  .long :global(p) {
+    font-family: system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #c2b8a6;
+    margin: 0 0 1rem;
+  }
+  .long :global(a) { color: #d9b074; text-underline-offset: 3px; }
+
+  .actions { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .btn {
+    font-family: system-ui, sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    padding: 0.7em 1.1em;
+    border-radius: 10px;
+    border: 1px solid rgba(240, 226, 200, 0.28);
+    color: #f3ece0;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+  }
+  .btn:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
+  .btn--solid { background: #c9a06a; color: #1a140d; border-color: #c9a06a; font-weight: 600; }
+  .btn--solid:hover { background: #d9b074; }
+
+  .subscribe { margin-top: 1.6rem; }
+  .subscribe-label {
+    display: block;
+    font-family: system-ui, sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9c917f;
+    margin-bottom: 0.6rem;
+  }
+  .subscribe-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .subscribe-input {
+    flex: 1 1 220px;
+    padding: 0.7em 0.9em;
+    border-radius: 10px;
+    border: 1px solid rgba(240, 226, 200, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    color: #f3ece0;
+    font-size: 0.95rem;
+    font-family: system-ui, sans-serif;
+  }
+  .subscribe-input::placeholder { color: #80776a; }
+  .subscribe-input:focus { outline: none; border-color: #c9a06a; }
+  .subscribe-msg { margin: 0.7rem 0 0; font-family: system-ui, sans-serif; font-size: 0.88rem; color: #9fd0a0; min-height: 1.2em; }
+  .subscribe-msg.err { color: #e0a0a0; }
+
+  @media (max-width: 560px) {
+    .detail { border-radius: 16px; max-height: 92vh; }
+  }
 </style>
