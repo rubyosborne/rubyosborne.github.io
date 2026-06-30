@@ -2,10 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles are disabled in astro.config, so set the box model ourselves. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden; /* never scroll sideways */
   background: #0e0c08;
   color: #f6ead0;
   -webkit-font-smoothing: antialiased;

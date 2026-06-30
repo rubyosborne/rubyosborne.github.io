@@ -35,10 +35,11 @@ export const projects = [
     name: 'Trading Bot',
     tag: 'Finance · Research',
     accent: '#b5482f',
+    status: 'training',
     short:
       'The research engine behind the trades — it turns finance podcasts into data, extracting every stock mention to test whether podcast hype actually predicts where a price goes next.',
     long: `<p>It asks a question the finance world assumes but rarely measures: when a popular podcast talks a stock up, does the price actually move? The system ingests finance shows, transcribes them — Whisper, or imported captions where a show has them — and uses a single, consistent LLM labeller to extract every stock mention with its sentiment and conviction, so the whole dataset is provably comparable.</p>
-    <p>From there it runs an event study: does a mention predict short-term drift against the S&amp;P 500 in the days after? It's deliberately measurement-first — prove the signal is real before any of it ever touches a trade. Currently paused mid-build.</p>`,
+    <p>From there it runs an event study: does a mention predict short-term drift against the broader market in the days after? It's deliberately measurement-first — prove the signal is real before any of it ever touches a trade. Currently training on the data it's gathering.</p>`,
   },
   {
     id: 'life-operating-system',
@@ -49,7 +50,7 @@ export const projects = [
     short:
       "A personal operating system for training and nutrition — an AI agent that plans my gym and food, checks in over Slack, and adapts each day to how I'm actually recovering.",
     long: `<p>The problem it solves is the daily overhead of doing health well: knowing what to train, what to eat, and how to adjust when life gets in the way. The Life Operating System is an AI agent that owns that loop — it plans gym sessions and nutrition, takes my reports and check-ins over Slack, and rewrites the next day against my real recovery rather than a fixed calendar.</p>
-    <p>It's in active development while I work through the part that matters most for something this personal: data sovereignty — where my health data lives and who can touch it. I'm settling the self-hosting before opening it up more widely.</p>`,
+    <p>It's in active development while I work through the part that matters most for something this personal: data sovereignty. The approach pairs self-hosting with temporal knowledge bases — time-versioned stores I own outright, so the full history of my health data stays mine and can be queried as it was at any point in time, with nothing handed to a third party. I'm settling that foundation before opening it up more widely.</p>`,
   },
   {
     id: 'tallow-lab',
@@ -59,8 +60,10 @@ export const projects = [
     short:
       "For anyone who wants to feel confident in their own skin — a premium, minimalist skincare brand built on one hero ingredient: rendered beef tallow, biologically close to our own skin's lipids.",
     long: `<p>It starts with a simple human want: to feel confident in your own skin. Tallow Lab sits at the intersection of ancestral nutrition and clean, bio-compatible skincare, built on a simple thesis — skin thrives on biologically compatible fats, and tallow is one of the most skin-identical, nutrient-dense moisturising bases there is. The range is whipped tallow balms for face and body, lightly infused with botanicals, built around minimal-ingredient formulations for low irritation and barrier repair.</p>
-    <p>As a business it's direct-to-consumer (Shopify-led, with natural pull into subscription replenishment and ancestral / clean-living communities). Its edge is narrative as much as formulation: where most brands compete on synthetic actives and complex routines, Tallow Lab competes on radical simplicity and ingredient transparency — "back to what skin actually recognises." I built it end-to-end, brand to store.</p>`,
+    <p>As a business it's direct-to-consumer (Shopify-led, with natural pull into subscription replenishment and ancestral / clean-living communities). Its edge is narrative as much as formulation: where most brands compete on synthetic actives and complex routines, Tallow Lab competes on radical simplicity and ingredient transparency — "back to what skin actually recognises." I built it end-to-end, brand to store.</p>
+    <p>My co-founder has since left Auckland, and without a local manufacturing base the brand is now being sold as a complete, turnkey asset.</p>`,
     logo: true,
+    links: [{ label: 'Visit the store', href: 'https://nfvzbg-vw.myshopify.com' }],
   },
   {
     id: 'tend-robotics',
@@ -78,8 +81,9 @@ export const projects = [
     tag: 'Engineering · Thesis',
     accent: '#4f7d3f',
     short:
-      'A self-sustaining, closed-loop hydroponic farm — my final-year engineering thesis, recycling water and nutrients for high yield with minimal waste.',
-    long: `<p>My final-year engineering thesis: a closed-loop hydroponic system that recirculates water and nutrients to grow high yields with a fraction of the inputs of conventional farming. The full thesis covers the system design, control loop and results.</p>`,
+      'My final-year mechatronics thesis — an IoT-controlled hydroponic system that automatically holds perfect growing conditions, and grew measurably better plants than a non-automated setup.',
+    long: `<p>A closed-loop, Internet-of-Things hydroponic system for productive food-growing in small urban spaces. Sensors and actuators — run by an Arduino and a Raspberry Pi — continuously hold the parameters that matter: pH, light, electrical conductivity (nutrients), temperature and humidity, using on-off control with hysteresis windows for stable real-time regulation and cloud-based data logging.</p>
+    <p>Designed, built and validated end to end, it grew measurably better plants than a non-automated hydroponic setup — with as much care given to a clean interface and a design you'd actually want in your home as to the control loop. My ME024-2023 mechatronics research project; the full report is below.</p>`,
     download: { label: 'Download the thesis (PDF)', href: '/projects/closed-loop-hydroponic-thesis.pdf' },
   },
   {
