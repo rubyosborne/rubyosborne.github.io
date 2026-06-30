@@ -85,10 +85,10 @@ const items = projects.map((p) => ({ ...p, img: findImg(p.id) }));
 
             {p.email && (
               <form class="subscribe" data-project={p.id} novalidate>
-                <label class="subscribe-label" for={`email-${p.id}`}>Get notified when it opens</label>
+                <label class="subscribe-label" for={`email-${p.id}`}>Join the newsletter</label>
                 <div class="subscribe-row">
                   <input id={`email-${p.id}`} class="subscribe-input" type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
-                  <button class="btn btn--solid" type="submit">Notify me</button>
+                  <button class="btn btn--solid" type="submit">Subscribe</button>
                 </div>
                 <p class="subscribe-msg" role="status" aria-live="polite"></p>
               </form>

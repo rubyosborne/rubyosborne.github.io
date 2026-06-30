@@ -25,20 +25,20 @@ export const projects = [
     tag: 'Finance · Writing',
     accent: '#c98a3c',
     short:
-      'A weekly brief my system writes and sends itself — a technical version for me (portfolio vs the S&P 500) and a plain-English one for friends, no jargon.',
-    long: `<p>Every Monday the system turns its analysis into two written pieces. The technical brief lands in my inbox: portfolio versus benchmark, the week's trades, the full funnel, and picks with conviction ratings and bear cases. The friend newsletter is the public-facing one — the same thinking translated into plain language, with a jargon-buster.</p>
-    <p>It writes both, opens a pull request, and emails them automatically when the brief merges. No drafting, no send button. The tone is the part I care about: confident, concrete and lightly personal — the way I'd actually explain a stock to a friend.</p>`,
+      'A plain-English investing newsletter for women who were never shown where to start — no jargon, no advice that needs a licence, just how I actually invest, so starting feels possible.',
+    long: `<p>Most investing content is written for people who already invest. Women, especially, get left out — not for any lack of ability, but because the on-ramp is intimidating: no one tells you where to begin, and the fear of "getting it wrong" keeps a lot of capable people on the sidelines.</p>
+    <p>This is my answer to that. My system already writes a weekly brief from its own analysis — portfolio versus the S&amp;P 500, the week's thinking, the picks — and the newsletter is the public-facing, plain-language version of it. It's shared as education, not personal financial advice, which keeps it the right side of regulation while still being genuinely useful. The aim is simple: make starting feel possible.</p>`,
+    email: true,
   },
   {
     id: 'trading-bot',
     name: 'Trading Bot',
-    tag: 'Finance · Automation',
+    tag: 'Finance · Research',
     accent: '#b5482f',
     short:
-      'An automated investing system running a picks-and-shovels AI & robotics thesis — quantitative technicals paired with an LLM decision layer, always with human sign-off.',
-    long: `<p>Each scheduled run collects live market data and technicals, feeds a structured briefing to a reasoning layer, and returns a ranked trade decision against a defined strategy and hard risk guardrails — concentration caps, fee ceilings and RSI-based sizing. Nothing executes without me: the bot emails a recommendation, waits for approval, then places fee-optimised orders and logs the result.</p>
-    <p>It currently runs in paper-trading mode as a single-operator system, in private testing. A waitlist is open for early access ahead of a wider release.</p>`,
-    email: true,
+      'The research engine behind the trades — it turns finance podcasts into data, extracting every stock mention to test whether podcast hype actually predicts where a price goes next.',
+    long: `<p>It asks a question the finance world assumes but rarely measures: when a popular podcast talks a stock up, does the price actually move? The system ingests finance shows, transcribes them — Whisper, or imported captions where a show has them — and uses a single, consistent LLM labeller to extract every stock mention with its sentiment and conviction, so the whole dataset is provably comparable.</p>
+    <p>From there it runs an event study: does a mention predict short-term drift against the S&amp;P 500 in the days after? It's deliberately measurement-first — prove the signal is real before any of it ever touches a trade. Currently paused mid-build.</p>`,
   },
   {
     id: 'life-operating-system',
@@ -47,9 +47,9 @@ export const projects = [
     accent: '#3b6f78',
     status: 'dev',
     short:
-      "An AI agent that runs my daily training and wellness on autopilot — reading my logs and recovery markers each evening, then writing the next day's session.",
-    long: `<p>A self-directing daily engine. Every evening it clones a structured repo of my profile, goals, training phases and recovery gates, scans my reports and wearable check-ins, recalibrates the plan against missed or modified work, and posts tomorrow's fully specified session. Recovery markers — not the calendar — gate progression, and durable preferences persist as long-term memory.</p>
-    <p>It runs as isolated "athletes" off one shared, parameterised skill, each writing only to its own space. Actively in development: I'm hardening the recalibration logic, expanding image-based check-ins, and onboarding a second user.</p>`,
+      "A personal operating system for training and nutrition — an AI agent that plans my gym and food, checks in over Slack, and adapts each day to how I'm actually recovering.",
+    long: `<p>The problem it solves is the daily overhead of doing health well: knowing what to train, what to eat, and how to adjust when life gets in the way. The Life Operating System is an AI agent that owns that loop — it plans gym sessions and nutrition, takes my reports and check-ins over Slack, and rewrites the next day against my real recovery rather than a fixed calendar.</p>
+    <p>It's in active development while I work through the part that matters most for something this personal: data sovereignty — where my health data lives and who can touch it. I'm settling the self-hosting before opening it up more widely.</p>`,
   },
   {
     id: 'tallow-lab',
@@ -57,8 +57,8 @@ export const projects = [
     tag: 'Product · Skincare',
     accent: '#cda06a',
     short:
-      'A premium, minimalist skincare brand built on one hero ingredient — rendered beef tallow, biologically close to our own skin lipids. Barrier repair through radical simplicity, not synthetic actives.',
-    long: `<p>Tallow Lab sits at the intersection of ancestral nutrition and clean, bio-compatible skincare, built on a simple thesis: skin thrives on biologically compatible fats, and tallow is one of the most skin-identical, nutrient-dense moisturising bases there is. The range — whipped tallow balms for face and body, lightly infused with botanicals — is built around minimal-ingredient formulations for low irritation and barrier repair.</p>
+      "For anyone who wants to feel confident in their own skin — a premium, minimalist skincare brand built on one hero ingredient: rendered beef tallow, biologically close to our own skin's lipids.",
+    long: `<p>It starts with a simple human want: to feel confident in your own skin. Tallow Lab sits at the intersection of ancestral nutrition and clean, bio-compatible skincare, built on a simple thesis — skin thrives on biologically compatible fats, and tallow is one of the most skin-identical, nutrient-dense moisturising bases there is. The range is whipped tallow balms for face and body, lightly infused with botanicals, built around minimal-ingredient formulations for low irritation and barrier repair.</p>
     <p>As a business it's direct-to-consumer (Shopify-led, with natural pull into subscription replenishment and ancestral / clean-living communities). Its edge is narrative as much as formulation: where most brands compete on synthetic actives and complex routines, Tallow Lab competes on radical simplicity and ingredient transparency — "back to what skin actually recognises." I built it end-to-end, brand to store.</p>`,
     logo: true,
   },
