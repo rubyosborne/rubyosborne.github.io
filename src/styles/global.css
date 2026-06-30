@@ -74,7 +74,7 @@ body {
   text-transform: lowercase;
   /* off-white fill with the grain blended in; transparent outside the glyphs */
   color: transparent;
-  background-image: var(--grain), linear-gradient(#f4ede1, #f4ede1);
+  background-image: var(--grain), linear-gradient(#fefefe, #fefefe);
   background-blend-mode: soft-light;
   -webkit-background-clip: text;
   background-clip: text;
@@ -92,7 +92,7 @@ body {
   text-transform: lowercase;
   text-align: left;
   color: transparent;
-  background-image: var(--grain), linear-gradient(#f1ebdf, #f1ebdf);
+  background-image: var(--grain), linear-gradient(#f8f6f1, #f8f6f1);
   background-blend-mode: soft-light;
   -webkit-background-clip: text;
   background-clip: text;
