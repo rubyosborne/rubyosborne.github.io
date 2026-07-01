@@ -148,14 +148,14 @@ export async function initForest() {
   function fit() {
     const aspect = window.innerWidth / window.innerHeight;
     const visH = 2 * Math.tan((FOV * Math.PI) / 180 / 2) * DIST;
-    planeH = visH * 1.5; // margin for pan + parallax
+    planeH = visH * 1.1; // small over-scan so edges never gap (less zoom than before)
     const planeW = planeH * aspect;
     canopy.scale.set(planeW, planeH, 1);
 
-    // cover-fit: sample a centered sub-rect of the image, zoomed in 8% for margin
+    // cover-fit: sample a centered sub-rect of the image, only a hair of margin
     const planeAspect = planeW / planeH;
-    const sx = Math.min(planeAspect / imgAspect, 1) * 0.92;
-    const sy = Math.min(imgAspect / planeAspect, 1) * 0.92;
+    const sx = Math.min(planeAspect / imgAspect, 1) * 0.98;
+    const sy = Math.min(imgAspect / planeAspect, 1) * 0.98;
     uCover.value.set(sx, sy);
   }
   fit();

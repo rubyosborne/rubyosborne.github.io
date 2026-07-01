@@ -79,8 +79,22 @@ html:has(.scene) body {
   -webkit-tap-highlight-color: transparent;
   will-change: transform, filter, opacity;
   transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* soft depth so white stays legible on any canopy pixel (drop-shadow works
+     with the grain-clipped text where text-shadow can't) */
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.6));
   /* faint printed-grain texture, blended into the off-white letter fill */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Soft dark scrim behind each entry: ~40% black at the text, fading to fully
+   transparent at the edges. Lifts contrast without a hard box. */
+.gap-label::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -0.55em -1.3em -0.9em -1.2em;
+  background: radial-gradient(125% 125% at 42% 46%, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0) 72%);
+  pointer-events: none;
 }
 
 /* word + arrow share one baseline row */
@@ -141,7 +155,7 @@ html:has(.scene) body {
   text-transform: lowercase;
   text-align: left;
   color: transparent;
-  background-image: var(--grain), linear-gradient(#f8f6f1, #f8f6f1);
+  background-image: var(--grain), linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92));
   background-blend-mode: soft-light;
   -webkit-background-clip: text;
   background-clip: text;

@@ -2,26 +2,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Base from '../layouts/Base.astro';
+import '../styles/theme.css';
 
-// Auto-detect dropped images (so you just add files, no code change).
 const imgExts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 const listImages = (dir) => {
   const abs = path.resolve('public', dir);
   if (!fs.existsSync(abs)) return [];
-  return fs
-    .readdirSync(abs)
-    .filter((f) => imgExts.includes(f.split('.').pop()?.toLowerCase()))
-    .sort()
-    .map((f) => `/${dir}/${f}`);
+  return fs.readdirSync(abs).filter((f) => imgExts.includes(f.split('.').pop()?.toLowerCase())).sort().map((f) => `/${dir}/${f}`);
 };
-const photos = listImages('me/photos');
 const cookies = listImages('me/cookies');
 const kitchen = listImages('me/kitchen');
 
-const intro =
-  'A mechatronics engineer turned AI advisor who works at the seam where automation, health, and human wellbeing meet.';
-
-// Themes from my live investing ops (snapshot of the watchlist + buckets).
 const marketsNotes = [
   'Physical AI: robotics, machine vision and sensing.',
   'The AI infrastructure build-out underneath it all.',
@@ -34,8 +25,27 @@ const interests = [
   { emoji: '🥑', label: 'Nutrition' },
   { emoji: '🥾', label: 'Nature & hiking' },
   { emoji: '🏊', label: 'Triathlon' },
+  { emoji: '🧘', label: 'Yoga' },
+  { emoji: '🏂', label: 'Snowboarding' },
   { emoji: '🎧', label: 'Podcasts' },
   { emoji: '🍲', label: 'Making food for friends' },
+];
+
+const podcasts = [
+  { name: 'Moonshots with Peter Diamandis', note: 'exponential tech & the future' },
+  { name: 'Huberman Lab', note: 'health & performance science' },
+];
+
+const recipe = {
+  name: 'Sourdough',
+  blurb:
+    "The thing I always make. It takes time, which is the point, and a warm loaf is a lovely thing to give people or bring to a dinner party. Everyone loves it.",
+};
+
+const admire = [
+  { name: 'Dr Amanda Williamson', note: 'My mentor and cheerleader, and genuinely brilliant.' },
+  { name: 'Mia Ware', note: 'The most resilient person I know, steady in the face of anything.' },
+  { name: 'Grace Brown', note: 'Founder of Andromeda, building robots for the good of people.' },
 ];
 
 const awards = [
@@ -53,190 +63,171 @@ const awards = [
   },
 ];
 
-// People I admire, names TBD (placeholders).
-const admire = [
-  { name: 'Dr Amanda Williamson', note: 'My mentor and cheerleader, and genuinely brilliant.' },
-  { name: 'Mia Ware', note: 'The most resilient person I know, steady in the face of anything.' },
-  { name: 'Grace Brown', note: 'Founder of Andromeda, building robots for the good of people.' },
+const hikes = [
+  { src: '/me/hikes/blue-lake.jpg', label: 'Blue Lake' },
+  { src: '/me/hikes/kepler.jpg', label: 'The Kepler Track' },
 ];
+const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
 
-// Find me, CONFIRM these handles/URLs.
 const socials = [
   { label: 'X', href: 'https://x.com/rubyosb21082829?s=11' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ruby-osborne-167339166/' },
 ];
-
-// Now listening, starter picks; swap for your real current rotation.
-const podcasts = [
-  { name: 'Moonshots with Peter Diamandis', note: 'exponential tech & the future' },
-  { name: 'Huberman Lab', note: 'health & performance science' },
-];
-
-// Signature dish, sourdough.
-const recipe = {
-  name: 'Sourdough',
-  blurb:
-    "The thing I always make. It takes time, which is the point, and a warm loaf is a lovely thing to give people or bring to a dinner party. Everyone loves it.",
-};
-
-// Trails + racing.
-const trails = ['Blue Lake', 'The Kepler Track'];
-const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
 ---
 
-<Base title="Myself · Ruby Osborne" description="A little about Ruby Osborne, what she's into, building, and bribeable with (cookies).">
+<Base title="Myself · Ruby Osborne" description="A little about Ruby Osborne: what she's into, building, and bribeable with (cookies).">
+  <script is:inline>document.documentElement.classList.add('js');</script>
+
+  <nav class="nav" aria-label="Sections">
+    <a href="#into">Into</a>
+    <a href="#people">People</a>
+    <a href="#awards">Awards</a>
+    <a href="#racing">Racing</a>
+    <a href="#hello">Say hi</a>
+  </nav>
+
   <main class="me">
     <a class="back" href="/">← canopy</a>
 
-    <header class="hero">
+    <header class="hero reveal">
       <h1>myself</h1>
+      <span class="hero-rule" aria-hidden="true"></span>
     </header>
 
-    <!-- INTERESTS -->
-    <section class="block">
-      <h2>things I'm into</h2>
-      <ul class="interests">
-        {interests.map((i) => (
-          <li><span class="emoji">{i.emoji}</span><span>{i.label}</span></li>
-        ))}
-      </ul>
-    </section>
+    <div class="bento">
+      <!-- what I'm into -->
+      <!-- what I'm into (interests + interested-in themes, combined) -->
+      <section class="box reveal span2" id="into">
+        <h2 class="box-title">what I'm into</h2>
+        <ul class="interests">
+          {interests.map((i) => (
+            <li><span class="emoji">{i.emoji}</span><span>{i.label}</span></li>
+          ))}
+        </ul>
 
-    <!-- WHAT I'M INTO (reading + listening, combined) -->
-    <section class="block">
-      <h2>what I'm into</h2>
+        <h3 class="subh gap">interested in</h3>
+        <p class="hint-line">themes from my investing ops, <a class="inline-link" href="/work?p=investing-newsletter">read &amp; subscribe →</a></p>
+        <ul class="now">
+          {marketsNotes.map((n) => <li>{n}</li>)}
+        </ul>
+      </section>
 
-      <h3 class="subh">reading into</h3>
-      <p class="hint-line">themes from my investing ops, <a class="inline-link" href="/work?p=investing-newsletter">read &amp; subscribe →</a></p>
-      <ul class="now">
-        {marketsNotes.map((n) => <li>{n}</li>)}
-      </ul>
-
-      <h3 class="subh">in my ears</h3>
-      <ul class="cards">
-        {podcasts.map((p) => (
-          <li><span class="card-h">{p.name}</span>{p.note && <span class="card-s">{p.note}</span>}</li>
-        ))}
-      </ul>
-    </section>
-
-    <!-- PEOPLE I ADMIRE -->
-    <section class="block">
-      <h2>people I admire</h2>
-      <ul class="admire">
-        {admire.map((a) => (
-          <li><span class="admire-name">{a.name}</span><span class="admire-note">{a.note}</span></li>
-        ))}
-      </ul>
-    </section>
-
-    <!-- PHOTOS -->
-    <section class="block">
-      <h2>a few photos I like</h2>
-      {photos.length > 0 ? (
-        <div class="gallery">
-          {photos.map((src) => <img src={src} alt="" loading="lazy" />)}
+      <!-- in my ears -->
+      <section class="box reveal span2">
+        <h2 class="box-title">in my ears</h2>
+        <div class="podpair">
+          {podcasts.map((p) => (
+            <div class="pod"><span class="row-h">{p.name}</span>{p.note && <span class="row-s">{p.note}</span>}</div>
+          ))}
         </div>
-      ) : (
-        <p class="hint-line">↪ drop images into <code>public/me/photos/</code> and they'll appear here.</p>
-      )}
-    </section>
+      </section>
 
-    <!-- FROM MY KITCHEN -->
-    <section class="block">
-      <h2>from my kitchen</h2>
-      <div class="recipe">
-        <span class="recipe-name">{recipe.name}</span>
-        <p class="recipe-blurb">{recipe.blurb}</p>
+      <!-- in the kitchen -->
+      <section class="box reveal span2">
+        <h2 class="box-title">in the kitchen</h2>
+        <span class="lead-name">{recipe.name}</span>
+        <p class="lead-blurb">{recipe.blurb}</p>
         {kitchen.length > 0 && (
-          <div class="kitchen-pics">
+          <div class="pic-row three">
             {kitchen.map((src) => <img src={src} alt="a sourdough loaf" loading="lazy" />)}
           </div>
         )}
-      </div>
-    </section>
+      </section>
 
-    <!-- TRAILS + RACING -->
-    <section class="block">
-      <h2>trails & racing</h2>
-      <ul class="trails">{trails.map((t) => <li>{t}</li>)}</ul>
-      <p class="race" id="race" data-iso={nextRace.iso} data-name={nextRace.name}></p>
-    </section>
+      <!-- people I admire -->
+      <section class="box reveal span2" id="people">
+        <h2 class="box-title">people I admire</h2>
+        <ul class="rows">
+          {admire.map((a) => (
+            <li><span class="row-h">{a.name}</span><span class="row-s">{a.note}</span></li>
+          ))}
+        </ul>
+      </section>
 
-    <!-- FIND ME -->
-    <section class="block">
-      <h2>find me</h2>
-      <p class="hint-line">↪ confirm these links point to the right profiles.</p>
-      <div class="socials">
-        {socials.map((s) => (
-          <a class="social" href={s.href} target="_blank" rel="noopener">{s.label} ↗</a>
-        ))}
-      </div>
-    </section>
+      <!-- proud moments -->
+      <section class="box reveal span2" id="awards">
+        <h2 class="box-title">proud moments</h2>
+        <ul class="awards">
+          {awards.map((a) => (
+            <li>
+              <span class="award-title">{a.title}</span>
+              <span class="award-body">{a.body}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-    <!-- AWARDS -->
-    <section class="block">
-      <h2>some nice things</h2>
-      <ul class="awards">
-        {awards.map((a) => (
-          <li>
-            <span class="award-title">{a.title}</span>
-            <span class="award-body">{a.body}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <!-- COOKIES / CONTACT -->
-    <section class="block cookies">
-      <h2>say hi 🍪</h2>
-      <p class="cookie-pitch">
-        I run almost entirely on cookies. Bribe me with one, tell me something interesting,
-        or just say hi, it lands straight in my Slack.
-      </p>
-      {cookies.length > 0 && (
-        <div class="cookie-strip">
-          {cookies.map((src) => <img src={src} alt="a favourite cookie" loading="lazy" />)}
+      <!-- trails & racing -->
+      <section class="box reveal span2" id="racing">
+        <h2 class="box-title">trails & racing</h2>
+        <p class="subh">my favourite hikes</p>
+        <div class="hikes">
+          {hikes.map((h) => (
+            <figure class="hike">
+              <img src={h.src} alt={h.label} loading="lazy" />
+              <figcaption>{h.label}</figcaption>
+            </figure>
+          ))}
         </div>
-      )}
-      <form class="contact" id="contact" novalidate>
-        <div class="row">
-          <input class="in" type="text" name="name" placeholder="your name" autocomplete="name" />
-          <input class="in" type="email" name="email" placeholder="email (optional)" autocomplete="email" />
+        <p class="race" id="race" data-iso={nextRace.iso} data-name={nextRace.name}></p>
+      </section>
+
+      <!-- say hi -->
+      <section class="box cookies reveal span2" id="hello">
+        <h2 class="box-title">say hi 🍪</h2>
+        <p class="cookie-pitch">
+          I run almost entirely on cookies. Bribe me with one, tell me something interesting,
+          or just say hi, it lands straight in my Slack.
+        </p>
+        {cookies.length > 0 && (
+          <div class="cookie-strip">
+            {cookies.map((src) => <img src={src} alt="a favourite cookie" loading="lazy" />)}
+          </div>
+        )}
+        <form class="contact" id="contact" novalidate>
+          <div class="row">
+            <input class="in" type="text" name="name" placeholder="your name" autocomplete="name" />
+            <input class="in" type="email" name="email" placeholder="email (optional)" autocomplete="email" />
+          </div>
+          <textarea class="in area" name="message" rows="4" placeholder="say something nice (or recommend me a cookie)" required></textarea>
+          <div class="row end">
+            <p class="contact-msg" role="status" aria-live="polite"></p>
+            <button class="btn-solid" type="submit">Send 🍪</button>
+          </div>
+        </form>
+        <div class="findme">
+          <span class="subh">find me</span>
+          <div class="socials">
+            {socials.map((s) => (
+              <a class="social" href={s.href} target="_blank" rel="noopener">{s.label} ↗</a>
+            ))}
+          </div>
         </div>
-        <textarea class="in area" name="message" rows="4" placeholder="say something nice (or recommend me a cookie)" required></textarea>
-        <div class="row end">
-          <p class="contact-msg" role="status" aria-live="polite"></p>
-          <button class="btn-solid" type="submit">Send 🍪</button>
-        </div>
-      </form>
-    </section>
+      </section>
+    </div>
 
     <footer class="me-foot">© 2026 Ruby Osborne · built in the canopy</footer>
   </main>
 </Base>
 
 <script>
-  const form = document.getElementById('contact');
+  // Contact form → Slack (optimistic)
+  const form = document.getElementById('contact') as HTMLFormElement | null;
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const f = e.target;
-      const msg = f.querySelector('.contact-msg');
+      const f = e.target as HTMLFormElement;
+      const msg = f.querySelector('.contact-msg') as HTMLElement;
       const data = {
-        name: f.name.value.trim(),
-        email: f.email.value.trim(),
-        message: f.message.value.trim(),
+        name: (f.elements.namedItem('name') as HTMLInputElement).value.trim(),
+        email: (f.elements.namedItem('email') as HTMLInputElement).value.trim(),
+        message: (f.elements.namedItem('message') as HTMLTextAreaElement).value.trim(),
       };
       if (!data.message) { msg.textContent = 'Add a message first 🙂'; msg.classList.add('err'); return; }
       msg.classList.remove('err');
       msg.textContent = 'Sending…';
       try {
-        const r = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+        const r = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
         if (!r.ok) throw new Error('bad');
         msg.textContent = 'Got it, thank you! 🍪';
         f.reset();
@@ -247,278 +238,236 @@ const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
     });
   }
 
-  // Live race countdown (if a date is set in the frontmatter).
+  // Live race countdown
   const race = document.getElementById('race');
   if (race) {
     const iso = race.dataset.iso;
     const name = race.dataset.name || 'race day';
     if (iso) {
-      const target = new Date(iso + 'T00:00:00').getTime();
-      const days = Math.ceil((target - Date.now()) / 86400000);
+      const days = Math.ceil((new Date(iso + 'T00:00:00').getTime() - Date.now()) / 86400000);
       race.textContent = days > 0 ? `⏱ ${days} days to ${name}` : `${name}, it's race week!`;
-    } else {
-      race.textContent = '↪ add a race date for a live countdown.';
     }
   }
+
+  // Gentle reveal on entry + scrollspy nav
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reveals = Array.from(document.querySelectorAll('.reveal'));
+  if (reduce) {
+    reveals.forEach((el) => el.classList.add('in-view'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+      }),
+      { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
+    );
+    reveals.forEach((el) => io.observe(el));
+  }
+
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.nav a'));
+  const linkFor = new Map(navLinks.map((a) => [a.getAttribute('href')!.slice(1), a]));
+  const spy = new IntersectionObserver(
+    (entries) => entries.forEach((e) => {
+      if (e.isIntersecting) {
+        navLinks.forEach((a) => a.classList.remove('active'));
+        linkFor.get((e.target as HTMLElement).id)?.classList.add('active');
+      }
+    }),
+    { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+  );
+  ['into', 'people', 'awards', 'racing', 'hello'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) spy.observe(el);
+  });
 </script>
 
 <style>
+  /* ── The calm cream room (one daylight source + matte plaster) ── */
+  :global(body) {
+    background-color: var(--cream);
+    background-image: var(--daylight);
+    background-attachment: fixed;
+    color: var(--ink);
+  }
+  :global(body)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--plaster);
+    background-size: 220px 220px;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+  }
+
   .me {
-    max-width: 880px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: clamp(1.5rem, 5vw, 4rem) clamp(1.2rem, 4vw, 2.5rem) 5rem;
-    color: #efe7da;
+    padding: 0 clamp(1.2rem, 5vw, 2rem) 6rem;
+    color: var(--ink);
+    font-family: var(--sans);
   }
   .back {
     display: inline-block;
-    color: #c9a06a;
+    color: var(--clay);
     text-decoration: none;
-    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-family: var(--serif);
     font-size: 1.1rem;
-    letter-spacing: 0.04em;
-    margin-bottom: 2.5rem;
+    letter-spacing: 0.02em;
+    margin: clamp(1.4rem, 4vw, 2.5rem) 0 0;
   }
-  .back:hover { color: #f3ece0; }
+  .back:hover { color: var(--ox-blood); }
 
+  /* ── Hero ── */
+  .hero { padding: clamp(2.5rem, 8vw, 5rem) 0 clamp(2rem, 5vw, 3rem); }
   .hero h1 {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-family: var(--serif);
     font-weight: 500;
     font-size: clamp(3rem, 11vw, 6rem);
-    line-height: 0.95;
+    line-height: 0.92;
     margin: 0;
     text-transform: lowercase;
+    color: var(--ox-blood);
   }
-  .intro {
-    margin: 1rem 0 0;
-    max-width: 52ch;
-    font-family: system-ui, sans-serif;
-    font-size: clamp(1.05rem, 2.6vw, 1.3rem);
-    line-height: 1.6;
-    color: #c2b8a6;
-  }
+  .hero-rule { display: block; width: 68px; height: 3px; margin-top: 1.4rem; border-radius: 2px; background: var(--ox-blood); }
 
-  .block { margin-top: clamp(2.6rem, 6vw, 4rem); }
-  .block h2 {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
+  /* ── Bento grid of boxes ── */
+  .bento { display: grid; grid-template-columns: 1fr; gap: clamp(0.9rem, 2vw, 1.2rem); }
+  @media (min-width: 720px) {
+    .bento { grid-template-columns: repeat(2, 1fr); align-items: start; }
+    .span2 { grid-column: 1 / -1; }
+  }
+  .box {
+    background: var(--bone);
+    border: 1px solid var(--hairline-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-1);
+    padding: clamp(1.3rem, 3vw, 1.9rem);
+  }
+  .box-title {
+    font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    margin: 0 0 1.2rem;
+    font-size: clamp(1.5rem, 3vw, 1.95rem);
+    line-height: 1.05;
+    margin: 0 0 1.1rem;
     text-transform: lowercase;
-    color: #f5efe4;
+    color: var(--ink);
   }
-  .hint-line {
-    font-family: system-ui, sans-serif;
-    font-size: 0.92rem;
-    color: #8f8576;
-    margin: 0 0 1rem;
-  }
-  .hint-line code {
-    font-family: ui-monospace, Menlo, monospace;
-    font-size: 0.85em;
-    color: #d9b074;
-    background: rgba(240, 192, 116, 0.1);
-    padding: 1px 5px;
-    border-radius: 4px;
-  }
+  .subh { font-family: var(--sans); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--taupe); margin: 0 0 0.7rem; display: block; }
+  .subh.gap { margin-top: 1.8rem; }
+  .podpair { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 560px) { .podpair { grid-template-columns: 1fr 1fr; gap: 1rem 2rem; } }
+  .pod { display: flex; flex-direction: column; gap: 0.2rem; }
+  .hint-line { font-family: var(--sans); font-size: 0.9rem; color: var(--taupe); margin: 0 0 0.9rem; }
+  .inline-link { color: var(--clay); text-decoration: none; }
+  .inline-link:hover { color: var(--ox-blood); text-decoration: underline; text-underline-offset: 3px; }
 
-  .now {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
-  .now li {
-    font-family: system-ui, sans-serif;
-    font-size: 1.08rem;
-    line-height: 1.55;
-    color: #cabfad;
-    padding-left: 1.4rem;
-    position: relative;
-  }
-  .now li::before { content: '→'; position: absolute; left: 0; color: #c9a06a; }
-
-  .interests {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.8rem;
-  }
+  /* ── interest pills (cream, to lift off the bone box) ── */
+  .interests { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.55rem; }
   .interests li {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    padding: 0.9rem 1.1rem;
-    border: 1px solid rgba(240, 226, 200, 0.12);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.025);
-    font-family: system-ui, sans-serif;
-    font-size: 1.02rem;
-    color: #e2d8c7;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5em 0.95em; border-radius: 999px;
+    background: color-mix(in srgb, var(--cream) 65%, #fff);
+    border: 1px solid var(--hairline-soft);
+    font-size: 0.95rem; color: var(--ink);
   }
-  .interests .emoji { font-size: 1.4rem; }
+  .interests .emoji { font-size: 1.15rem; }
 
-  .admire {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.8rem;
-  }
-  .admire li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding: 1.1rem 1.2rem;
-    border: 1px solid rgba(240, 226, 200, 0.14);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.025);
-  }
-  .subh {
-    font-family: system-ui, sans-serif;
-    font-size: 0.78rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: #9c917f;
-    margin: 1.6rem 0 0.7rem;
-  }
-  .subh:first-of-type { margin-top: 0; }
-  .inline-link { color: #c9a06a; text-decoration: none; text-underline-offset: 3px; }
-  .inline-link:hover { color: #f3ece0; text-decoration: underline; }
-  .kitchen-pics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.6rem;
-    margin-top: 1.2rem;
-  }
-  .kitchen-pics img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; }
-  .admire-name { font-family: '"Cormorant Garamond"', Georgia, serif; font-size: 1.35rem; color: #f3ece0; }
-  .admire-note { font-family: system-ui, sans-serif; font-size: 0.88rem; color: #8f8576; }
+  /* ── interested-in list ── */
+  .now { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .now li { position: relative; padding-left: 1.2rem; font-size: 0.98rem; line-height: 1.5; color: color-mix(in srgb, var(--ink) 88%, var(--cream)); }
+  .now li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; border-radius: 50%; background: var(--clay); }
 
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 0.6rem;
-  }
-  .gallery img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid rgba(240, 226, 200, 0.1);
-  }
+  /* ── typographic rows (podcasts, people) with hairline dividers ── */
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { display: flex; flex-direction: column; gap: 0.2rem; padding: 0.85rem 0; border-top: 1px solid var(--hairline-soft); }
+  .rows li:first-child { border-top: none; padding-top: 0; }
+  .row-h { font-family: var(--serif); font-size: 1.25rem; color: var(--ink); }
+  .row-s { font-size: 0.88rem; color: var(--taupe); line-height: 1.5; }
 
-  .awards {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  .awards li {
-    padding: 1.3rem 1.4rem;
-    border: 1px solid rgba(240, 226, 200, 0.14);
-    border-radius: 14px;
-    background: linear-gradient(150deg, rgba(201, 160, 106, 0.08), transparent);
-  }
-  .award-title {
-    display: block;
-    font-family: '"Cormorant Garamond"', Georgia, serif;
-    font-size: 1.5rem;
-    color: #f6e9cf;
-    margin-bottom: 0.4rem;
-  }
-  .award-body { font-family: system-ui, sans-serif; font-size: 0.96rem; line-height: 1.6; color: #b6ac9c; }
+  /* ── kitchen ── */
+  .lead-name { display: block; font-family: var(--serif); font-size: 1.4rem; color: var(--ink); }
+  .lead-blurb { color: color-mix(in srgb, var(--ink) 80%, var(--cream)); margin: 0.4rem 0 1rem; line-height: 1.6; max-width: 60ch; }
+  .pic-row { display: grid; gap: 0.6rem; }
+  .pic-row.three { grid-template-columns: repeat(3, 1fr); }
+  .pic-row img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-1); }
 
-  /* COOKIES / CONTACT */
-  .cookies {
-    margin-top: clamp(3rem, 7vw, 5rem);
-    padding: clamp(1.5rem, 4vw, 2.4rem);
-    border: 1px solid rgba(240, 226, 200, 0.16);
-    border-radius: 18px;
-    background: radial-gradient(120% 120% at 20% 0%, rgba(201, 160, 106, 0.12), transparent 60%);
-  }
-  .cookie-pitch {
-    font-family: system-ui, sans-serif;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: #c2b8a6;
-    max-width: 54ch;
-    margin: 0 0 1.4rem;
-  }
-  .cookie-strip { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
-  .cookie-strip img { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; }
+  /* ── awards ── */
+  .awards { list-style: none; margin: 0; padding: 0; }
+  .awards li { padding: 1rem 0; border-top: 1px solid var(--hairline-soft); }
+  .awards li:first-child { border-top: none; padding-top: 0; }
+  .award-title { display: block; font-family: var(--serif); font-size: 1.25rem; color: var(--ox-blood); margin-bottom: 0.3rem; line-height: 1.15; }
+  .award-body { font-size: 0.92rem; color: color-mix(in srgb, var(--ink) 80%, var(--cream)); line-height: 1.55; }
 
+  /* ── hikes ── */
+  .hikes { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin: 0 0 1.2rem; }
+  .hike { margin: 0; }
+  .hike img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow-1); }
+  .hike figcaption { font-family: var(--sans); font-size: 0.85rem; color: var(--taupe); margin-top: 0.45rem; }
+  .race { color: var(--clay); font-size: 1rem; margin: 0; }
+
+  /* ── say hi (distinct warm tone) ── */
+  .box.cookies { background: color-mix(in srgb, var(--ox-blood) 6%, var(--bone)); box-shadow: var(--shadow-2); }
+  .cookie-pitch { font-size: 1.02rem; line-height: 1.6; color: color-mix(in srgb, var(--ink) 82%, var(--cream)); max-width: 54ch; margin: 0 0 1.3rem; }
+  .cookie-strip { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.3rem; }
+  .cookie-strip img { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-1); }
   .contact { display: flex; flex-direction: column; gap: 0.7rem; }
   .row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
   .row.end { align-items: center; justify-content: space-between; }
   .in {
-    flex: 1 1 200px;
-    padding: 0.8em 1em;
-    border-radius: 10px;
-    border: 1px solid rgba(240, 226, 200, 0.22);
-    background: rgba(255, 255, 255, 0.04);
-    color: #f3ece0;
-    font-size: 1rem;
-    font-family: system-ui, sans-serif;
+    flex: 1 1 200px; padding: 0.8em 1em; border-radius: var(--radius);
+    border: 1px solid var(--hairline); background: color-mix(in srgb, var(--cream) 40%, #fff);
+    color: var(--ink); font-size: 1rem; font-family: var(--sans);
   }
-  .in::placeholder { color: #80776a; }
-  .in:focus { outline: none; border-color: #c9a06a; }
+  .in::placeholder { color: var(--taupe); }
+  .in:focus { outline: none; border-color: var(--ox-blood); }
   .area { width: 100%; resize: vertical; }
-  .contact-msg { margin: 0; font-family: system-ui, sans-serif; font-size: 0.9rem; color: #9fd0a0; min-height: 1.2em; }
-  .contact-msg.err { color: #e0a0a0; }
+  .contact-msg { margin: 0; font-size: 0.9rem; color: #6f7a4e; min-height: 1.2em; }
+  .contact-msg.err { color: var(--clay); }
   .btn-solid {
-    background: #c9a06a;
-    color: #1a140d;
-    border: none;
-    font-weight: 600;
-    font-size: 1rem;
-    font-family: system-ui, sans-serif;
-    padding: 0.7em 1.3em;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.25s ease, transform 0.2s ease;
+    background: var(--ox-blood); color: var(--bone); border: none; font-weight: 600;
+    font-size: 1rem; font-family: var(--sans); padding: 0.75em 1.5em; border-radius: 999px;
+    cursor: pointer; box-shadow: var(--shadow-1);
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
   }
-  .btn-solid:hover { background: #d9b074; transform: translateY(-2px); }
+  .btn-solid:hover { background: var(--ox-blood-deep); transform: translateY(-2px); box-shadow: var(--shadow-2); }
 
-  .me-foot {
-    margin-top: 4rem;
-    font-family: system-ui, sans-serif;
-    font-size: 0.82rem;
-    color: #6f6657;
-    letter-spacing: 0.04em;
+  .findme { margin-top: 1.6rem; padding-top: 1.3rem; border-top: 1px solid var(--hairline); }
+  .socials { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+  .social { font-size: 0.95rem; text-decoration: none; color: var(--ink); padding: 0.55em 1.1em; border-radius: 999px; border: 1px solid var(--hairline); background: var(--bone); transition: transform 0.2s ease, border-color 0.25s ease, color 0.25s ease; }
+  .social:hover { transform: translateY(-2px); border-color: var(--ox-blood); color: var(--ox-blood); }
+
+  .me-foot { margin-top: clamp(3rem, 7vw, 5rem); font-size: 0.82rem; color: var(--taupe); letter-spacing: 0.04em; text-align: center; }
+
+  /* ── Slim nav: sticky top bar (mobile) → fixed left rail (wide desktop) ── */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; gap: 1.3rem; justify-content: center; align-items: center;
+    padding: 0.75rem 1rem;
+    background: color-mix(in srgb, var(--cream) 80%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline-soft);
+    overflow-x: auto;
+  }
+  .nav a { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; white-space: nowrap; transition: color 0.25s ease; }
+  .nav a:hover, .nav a.active { color: var(--ox-blood); }
+
+  @media (min-width: 1240px) {
+    .nav {
+      position: fixed; left: calc((100vw - 960px) / 2 - 7rem); top: 50%; transform: translateY(-50%);
+      flex-direction: column; align-items: flex-start; gap: 1rem; width: 6rem;
+      padding: 0; background: none; backdrop-filter: none; border: none; overflow: visible;
+    }
+    .nav a { position: relative; }
+    .nav a.active { padding-left: 1.1rem; }
+    .nav a.active::before { content: ''; position: absolute; left: 0; top: 50%; width: 0.7rem; height: 1px; background: var(--ox-blood); }
   }
 
-  /* now-listening cards */
-  .cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; }
-  .cards li { display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem 1.2rem; border: 1px solid rgba(240, 226, 200, 0.12); border-radius: 12px; background: rgba(255, 255, 255, 0.025); }
-  .card-h { font-family: '"Cormorant Garamond"', Georgia, serif; font-size: 1.3rem; color: #f3ece0; }
-  .card-s { font-family: system-ui, sans-serif; font-size: 0.88rem; color: #9c917f; }
-
-  /* recipe */
-  .recipe { padding: 1.3rem 1.4rem; border: 1px solid rgba(240, 226, 200, 0.14); border-radius: 14px; background: rgba(255, 255, 255, 0.02); }
-  .recipe-name { display: block; font-family: '"Cormorant Garamond"', Georgia, serif; font-size: 1.6rem; color: #f6e9cf; }
-  .recipe-blurb { font-family: system-ui, sans-serif; color: #b6ac9c; margin: 0.4rem 0 1rem; }
-  .recipe-steps { margin: 0; padding-left: 1.2rem; color: #cabfad; font-family: system-ui, sans-serif; line-height: 1.7; }
-
-  /* trails + race */
-  .trails { list-style: none; margin: 0 0 1rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
-  .trails li { font-family: system-ui, sans-serif; font-size: 0.95rem; color: #e2d8c7; padding: 0.5em 0.9em; border: 1px solid rgba(240, 226, 200, 0.16); border-radius: 999px; }
-  .trails li::before { content: '🥾 '; }
-  .race { font-family: system-ui, sans-serif; color: #c9a06a; font-size: 1rem; margin: 0; }
-
-  /* find me */
-  .socials { display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .social { font-family: system-ui, sans-serif; font-size: 1rem; text-decoration: none; color: #f3ece0; padding: 0.7em 1.2em; border: 1px solid rgba(240, 226, 200, 0.25); border-radius: 10px; transition: background 0.25s ease, transform 0.2s ease, border-color 0.25s ease; }
-  .social:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); border-color: #c9a06a; }
-
-  @media (max-width: 640px) {
-    .intro { font-size: 1.12rem; }
-    .now li { font-size: 1.12rem; }
+  /* ── Gentle fade-and-rise on entry (only when JS is on) ── */
+  :global(html.js) .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  :global(html.js) .reveal.in-view { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .reveal { opacity: 1; transform: none; transition: none; }
   }
 </style>
