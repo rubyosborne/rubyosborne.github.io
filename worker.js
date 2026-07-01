@@ -76,6 +76,46 @@ async function handleContact(request, env) {
   return json({ ok: true });
 }
 
+async function sha256hex(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Password gate for the protected deck. The password lives ONLY in the
+// DECK_PASSWORD secret (Cloudflare dashboard) — never in this public repo.
+async function handleDeckAuth(request, env) {
+  let body;
+  try { body = await request.json(); } catch { return json({ error: 'bad request' }, 400); }
+  const secret = env.DECK_PASSWORD || '';
+  const password = (body?.password || '').toString();
+  if (!secret || password !== secret) return json({ error: 'wrong password' }, 401);
+  const token = await sha256hex('deck:' + secret);
+  return new Response(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: {
+      'content-type': 'application/json',
+      'set-cookie': `deck_auth=${token}; Path=/; Max-Age=86400; HttpOnly; Secure; SameSite=Lax`,
+    },
+  });
+}
+
+// Guards /protected/* : serve the asset INLINE only with a valid auth cookie,
+// otherwise bounce to the password page. (run_worker_first makes this run
+// before the static asset is served.)
+async function guardProtected(request, env) {
+  const secret = env.DECK_PASSWORD || '';
+  const want = secret ? await sha256hex('deck:' + secret) : null;
+  const m = (request.headers.get('cookie') || '').match(/(?:^|;\s*)deck_auth=([a-f0-9]+)/);
+  if (want && m && m[1] === want) {
+    const res = await env.ASSETS.fetch(request);
+    const h = new Headers(res.headers);
+    h.set('content-disposition', 'inline');
+    h.set('cache-control', 'private, no-store');
+    return new Response(res.body, { status: res.status, headers: h });
+  }
+  return Response.redirect(new URL('/deck', request.url).toString(), 302);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -86,6 +126,13 @@ export default {
     if (url.pathname === '/api/contact') {
       if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405);
       return handleContact(request, env);
+    }
+    if (url.pathname === '/api/deck-auth') {
+      if (request.method !== 'POST') return json({ error: 'method not allowed' }, 405);
+      return handleDeckAuth(request, env);
+    }
+    if (url.pathname.startsWith('/protected/')) {
+      return guardProtected(request, env);
     }
     // Everything else → static assets (the built Astro site).
     return env.ASSETS.fetch(request);

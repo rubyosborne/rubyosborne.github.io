@@ -1,0 +1,155 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/theme.css';
+---
+
+<Base title="Tend Robotics · preread" description="Password-protected preread.">
+  <main class="deck">
+    <!-- Locked state: password gate -->
+    <section class="gate" id="gate">
+      <a class="back" href="/work">← work</a>
+      <div class="gate-card">
+        <h1>Tend Robotics</h1>
+        <p class="gate-sub">This preread is password-protected.</p>
+        <form class="gate-form" id="unlock" novalidate>
+          <input class="pw" id="pw" type="password" placeholder="password" autocomplete="off" autocapitalize="off" spellcheck="false" />
+          <button class="btn-solid" type="submit">View</button>
+        </form>
+        <p class="gate-msg" id="msg" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- Unlocked state: inline viewer -->
+    <section class="viewer" id="viewer" hidden>
+      <div class="viewer-bar">
+        <a class="back" href="/work">← work</a>
+        <span class="viewer-title">Tend Robotics · preread</span>
+      </div>
+      <iframe class="frame" id="frame" title="Tend Robotics preread"></iframe>
+    </section>
+  </main>
+</Base>
+
+<script>
+  const form = document.getElementById('unlock') as HTMLFormElement;
+  const msg = document.getElementById('msg') as HTMLElement;
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pw = (document.getElementById('pw') as HTMLInputElement).value;
+    msg.textContent = 'Checking…';
+    msg.classList.remove('err');
+    try {
+      const r = await fetch('/api/deck-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw }),
+      });
+      if (r.ok) {
+        (document.getElementById('gate') as HTMLElement).hidden = true;
+        (document.getElementById('viewer') as HTMLElement).hidden = false;
+        // #toolbar=0 hides the browser PDF toolbar (download/print) where supported.
+        (document.getElementById('frame') as HTMLIFrameElement).src =
+          '/protected/tend-robotics.pdf#toolbar=0&navpanes=0';
+      } else {
+        msg.textContent = 'Wrong password.';
+        msg.classList.add('err');
+      }
+    } catch {
+      msg.textContent = 'Something went wrong — try again.';
+      msg.classList.add('err');
+    }
+  });
+</script>
+
+<style>
+  :global(body) {
+    background-color: var(--cream);
+    background-image: var(--daylight);
+    background-attachment: fixed;
+    color: var(--ink);
+    margin: 0;
+  }
+  .deck { font-family: var(--sans); }
+
+  .back {
+    display: inline-block;
+    color: var(--clay);
+    text-decoration: none;
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+  .back:hover { color: var(--ox-blood); }
+
+  /* Locked gate */
+  .gate {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem 1.2rem;
+    position: relative;
+  }
+  .gate .back { position: absolute; top: clamp(1.4rem, 4vw, 2.5rem); left: clamp(1.2rem, 4vw, 2.5rem); }
+  .gate-card {
+    width: min(420px, 100%);
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2);
+    padding: clamp(1.6rem, 5vw, 2.6rem);
+    text-align: left;
+  }
+  .gate-card h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    color: var(--ox-blood);
+    margin: 0;
+    line-height: 1;
+  }
+  .gate-sub { color: var(--taupe); font-size: 0.95rem; margin: 0.7rem 0 1.6rem; }
+  .gate-form { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .pw {
+    flex: 1 1 200px;
+    padding: 0.8em 1em;
+    border-radius: var(--radius);
+    border: 1px solid var(--hairline);
+    background: color-mix(in srgb, var(--cream) 40%, #fff);
+    color: var(--ink);
+    font-size: 1rem;
+    font-family: var(--sans);
+  }
+  .pw::placeholder { color: var(--taupe); }
+  .pw:focus { outline: none; border-color: var(--ox-blood); }
+  .btn-solid {
+    background: var(--ox-blood);
+    color: var(--bone);
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: var(--sans);
+    padding: 0.75em 1.4em;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: var(--shadow-1);
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  }
+  .btn-solid:hover { background: var(--ox-blood-deep); transform: translateY(-2px); box-shadow: var(--shadow-2); }
+  .gate-msg { min-height: 1.2em; margin: 0.9rem 0 0; font-size: 0.9rem; color: var(--taupe); }
+  .gate-msg.err { color: var(--clay); }
+
+  /* Unlocked viewer */
+  .viewer { display: flex; flex-direction: column; height: 100vh; }
+  .viewer-bar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem clamp(1rem, 3vw, 1.6rem);
+    background: color-mix(in srgb, var(--cream) 82%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+  .viewer-title { font-family: var(--serif); color: var(--ink); font-size: 1.05rem; }
+  .frame { flex: 1 1 auto; width: 100%; border: none; background: var(--bone); }
+</style>

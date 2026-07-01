@@ -71,6 +71,7 @@ export const projects = [
     accent: '#5b6b7a',
     short: 'A physical AI deployment that could truly ameliorate the home-care gap for the elderly.',
     long: `<p>A physical AI deployment that could truly ameliorate the home-care gap for the elderly.</p>`,
+    links: [{ label: 'View the preread (password protected)', href: '/deck' }],
   },
   {
     id: 'closed-loop-hydroponic-farm',
