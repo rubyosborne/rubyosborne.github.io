@@ -23,9 +23,9 @@ const intro =
 
 // Themes from my live investing ops (snapshot of the watchlist + buckets).
 const marketsNotes = [
-  'Physical AI — robotics, machine vision and sensing.',
+  'Physical AI: robotics, machine vision and sensing.',
   'The AI infrastructure build-out underneath it all.',
-  'Security for AI — protecting the apps and the agents.',
+  'Security for AI: protecting the apps and the agents.',
   'A bit of China, a bit of space, and the odd asymmetric bet.',
 ];
 
@@ -40,43 +40,43 @@ const interests = [
 
 const awards = [
   {
-    title: 'Winner — Multinational Partner Rising Star, NZ Women in ICT 2026',
-    body: 'Named Multinational Partner Rising Star Winner at the Reseller News New Zealand Women in ICT Awards (WIICTA) 2026 — the longest-running celebration of women in tech across the region.',
+    title: 'Winner: Multinational Partner Rising Star, NZ Women in ICT 2026',
+    body: 'Named Multinational Partner Rising Star Winner at the Reseller News New Zealand Women in ICT Awards (WIICTA) 2026, the longest-running celebration of women in tech across the region.',
   },
   {
-    title: 'Rising Star — Deloitte Asia Pacific Women in Technology',
+    title: 'Rising Star: Deloitte Asia Pacific Women in Technology',
     body: 'Rising Star in the Deloitte Asia Pacific Women in Technology Awards. At Deloitte New Zealand, I lead Physical AI and the NVIDIA alliance.',
   },
   {
-    title: '3rd place — Iron Māori Triathlon, Napier',
-    body: 'Podium finish at the Iron Māori triathlon in Napier — swim, bike, run.',
+    title: '3rd place, Iron Māori Triathlon, Napier',
+    body: 'Podium finish at the Iron Māori triathlon in Napier: swim, bike, run.',
   },
 ];
 
-// People I admire — names TBD (placeholders).
+// People I admire, names TBD (placeholders).
 const admire = [
   { name: 'Dr Amanda Williamson', note: 'My mentor and cheerleader, and genuinely brilliant.' },
-  { name: 'Mia Ware', note: 'The most resilient person I know — steady in the face of anything.' },
+  { name: 'Mia Ware', note: 'The most resilient person I know, steady in the face of anything.' },
   { name: 'Grace Brown', note: 'Founder of Andromeda, building robots for the good of people.' },
 ];
 
-// Find me — CONFIRM these handles/URLs.
+// Find me, CONFIRM these handles/URLs.
 const socials = [
   { label: 'X', href: 'https://x.com/rubyosb21082829?s=11' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ruby-osborne-167339166/' },
 ];
 
-// Now listening — starter picks; swap for your real current rotation.
+// Now listening, starter picks; swap for your real current rotation.
 const podcasts = [
   { name: 'Moonshots with Peter Diamandis', note: 'exponential tech & the future' },
   { name: 'Huberman Lab', note: 'health & performance science' },
 ];
 
-// Signature dish — sourdough.
+// Signature dish, sourdough.
 const recipe = {
   name: 'Sourdough',
   blurb:
-    "The thing I always make. It takes time, which is the point — and a warm loaf is a lovely thing to give people or bring to a dinner party. Everyone loves it.",
+    "The thing I always make. It takes time, which is the point, and a warm loaf is a lovely thing to give people or bring to a dinner party. Everyone loves it.",
 };
 
 // Trails + racing.
@@ -84,7 +84,7 @@ const trails = ['Blue Lake', 'The Kepler Track'];
 const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
 ---
 
-<Base title="Myself · Ruby Osborne" description="A little about Ruby Osborne — what she's into, building, and bribeable with (cookies).">
+<Base title="Myself · Ruby Osborne" description="A little about Ruby Osborne, what she's into, building, and bribeable with (cookies).">
   <main class="me">
     <a class="back" href="/">← canopy</a>
 
@@ -107,7 +107,7 @@ const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
       <h2>what I'm into</h2>
 
       <h3 class="subh">reading into</h3>
-      <p class="hint-line">themes from my investing ops — <a class="inline-link" href="/work?p=investing-newsletter">read &amp; subscribe →</a></p>
+      <p class="hint-line">themes from my investing ops, <a class="inline-link" href="/work?p=investing-newsletter">read &amp; subscribe →</a></p>
       <ul class="now">
         {marketsNotes.map((n) => <li>{n}</li>)}
       </ul>
@@ -192,7 +192,7 @@ const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
       <h2>say hi 🍪</h2>
       <p class="cookie-pitch">
         I run almost entirely on cookies. Bribe me with one, tell me something interesting,
-        or just say hi — it lands straight in my Slack.
+        or just say hi, it lands straight in my Slack.
       </p>
       {cookies.length > 0 && (
         <div class="cookie-strip">
@@ -238,10 +238,10 @@ const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
           body: JSON.stringify(data),
         });
         if (!r.ok) throw new Error('bad');
-        msg.textContent = 'Got it — thank you! 🍪';
+        msg.textContent = 'Got it, thank you! 🍪';
         f.reset();
       } catch {
-        msg.textContent = 'Got it — thank you! 🍪';
+        msg.textContent = 'Got it, thank you! 🍪';
         f.reset();
       }
     });
@@ -255,7 +255,7 @@ const nextRace = { name: 'the Queenstown Marathon', iso: '2026-11-14' };
     if (iso) {
       const target = new Date(iso + 'T00:00:00').getTime();
       const days = Math.ceil((target - Date.now()) / 86400000);
-      race.textContent = days > 0 ? `⏱ ${days} days to ${name}` : `${name} — it's race week!`;
+      race.textContent = days > 0 ? `⏱ ${days} days to ${name}` : `${name}, it's race week!`;
     } else {
       race.textContent = '↪ add a race date for a live countdown.';
     }

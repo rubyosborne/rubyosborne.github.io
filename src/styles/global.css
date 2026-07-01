@@ -58,13 +58,13 @@ html:has(.scene) body {
   backface-visibility: hidden;
 }
 
-/* Individual branch groups — GSAP rotates these around their join point. */
+/* Individual branch groups, GSAP rotates these around their join point. */
 .branch {
   transform-box: fill-box;
   will-change: transform;
 }
 
-/* Sky-gap navigation — dictionary entries: lowercase serif word + definition,
+/* Sky-gap navigation, dictionary entries: lowercase serif word + definition,
    off-white, slight print grain, NO shadow. */
 .gap-label {
   position: absolute;
@@ -120,7 +120,7 @@ html:has(.scene) body {
   transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.3s ease;
 }
 
-/* Slide-in "go" arrow — a clear button affordance on hover / focus / tap. */
+/* Slide-in "go" arrow, a clear button affordance on hover / focus / tap. */
 .gap-label .go {
   font-size: 0.42em;
   line-height: 1;
@@ -148,7 +148,7 @@ html:has(.scene) body {
   transition: filter 0.4s ease, opacity 0.5s ease;
 }
 
-/* Activate (hover / gaze / focus / tap): clearly a button — brighten to pure
+/* Activate (hover / gaze / focus / tap): clearly a button, brighten to pure
    white, underline sweeps full width, arrow slides in, whole entry lifts. */
 .gap-label:hover,
 .gap-label:focus-visible,
@@ -180,14 +180,14 @@ html:has(.scene) body {
   filter: brightness(1.08);
 }
 
-/* Keyboard focus ring — visible for accessibility. */
+/* Keyboard focus ring, visible for accessibility. */
 .gap-label:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
   outline-offset: 12px;
   border-radius: 6px;
 }
 
-/* Sun bloom — soft, not a lens-flare cliché. */
+/* Sun bloom, soft, not a lens-flare cliché. */
 .sun-bloom {
   position: absolute;
   border-radius: 50%;

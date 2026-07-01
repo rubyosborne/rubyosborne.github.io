@@ -18,7 +18,7 @@ import {
 } from 'three/tsl';
 
 /**
- * Interactive photoreal canopy — flat-plane, fragment-shader parallax.
+ * Interactive photoreal canopy, flat-plane, fragment-shader parallax.
  *
  * Per deep-research findings: professionals do NOT vertex-displace a mesh from
  * a depth map (that tears/spikes at depth edges + periphery). Instead the depth
@@ -62,7 +62,7 @@ export async function initForest() {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(FOV, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 0); // static — parallax is in the shader, not the camera
+  camera.position.set(0, 0, 0); // static, parallax is in the shader, not the camera
 
   // --- Load textures first -------------------------------------------------
   const loader = new THREE.TextureLoader();
@@ -141,7 +141,7 @@ export async function initForest() {
   canopy.position.set(0, 0, -DIST);
   scene.add(canopy);
 
-  // (Floor removed — canopy-only scene.)
+  // (Floor removed, canopy-only scene.)
 
   // --- Sizing: make the plane fill the frustum, recompute cover on resize --
   let planeH = 1;

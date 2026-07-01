@@ -135,10 +135,10 @@ export function initProjects() {
           body: JSON.stringify({ email, project: form.dataset.project }),
         });
         if (!r.ok) throw new Error('not ok');
-        msg.textContent = "You're on the list — thank you.";
+        msg.textContent = "You're on the list, thank you.";
         form.reset();
       } catch {
-        msg.textContent = "You're on the list — thank you.";
+        msg.textContent = "You're on the list, thank you.";
         form.reset();
       }
     });
