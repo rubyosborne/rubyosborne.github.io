@@ -92,6 +92,7 @@ const socials = [
     <header class="hero reveal">
       <h1>myself</h1>
       <span class="hero-rule" aria-hidden="true"></span>
+      <p class="wip">UI in design · cool things coming soon</p>
     </header>
 
     <div class="bento">
@@ -331,6 +332,18 @@ const socials = [
     color: var(--ox-blood);
   }
   .hero-rule { display: block; width: 68px; height: 3px; margin-top: 1.4rem; border-radius: 2px; background: var(--ox-blood); }
+  .wip {
+    display: inline-block;
+    margin: 1.3rem 0 0;
+    padding: 0.55em 1em;
+    border-radius: 8px;
+    background: #1c1714;
+    color: var(--bone);
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    box-shadow: var(--shadow-1);
+  }
 
   /* ── Bento grid of boxes ── */
   .bento { display: grid; grid-template-columns: 1fr; gap: clamp(0.9rem, 2vw, 1.2rem); }

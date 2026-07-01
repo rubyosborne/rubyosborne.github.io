@@ -93,7 +93,7 @@ export async function initForest() {
   // --- Uniforms ------------------------------------------------------------
   const uGaze = uniform(new THREE.Vector2(0, 0));
   const uCover = uniform(new THREE.Vector2(1, 1)); // cover-fit scale, recomputed on resize
-  const uParallax = uniform(0.05);
+  const uParallax = uniform(0.07);
   const uWind = uniform(reduceMotion ? 0 : 1);
 
   // --- Sky sphere (golden-hour, shows through the keyed-out gaps) ----------
@@ -274,24 +274,25 @@ export async function initForest() {
   const t0 = performance.now();
   function animate() {
     const t = (performance.now() - t0) / 1000;
-    const driftX = reduceMotion ? 0 : Math.sin(t * 0.25) * 0.12;
-    const driftY = reduceMotion ? 0 : Math.cos(t * 0.2) * 0.1;
+    // A living auto-drift that is ALWAYS added on top of any input, so the
+    // canopy keeps moving even with no mouse (e.g. on mobile at rest).
+    const driftX = reduceMotion ? 0 : Math.sin(t * 0.23) * 0.32;
+    const driftY = reduceMotion ? 0 : Math.cos(t * 0.19) * 0.26;
 
-    let ax: number, ay: number;
+    let bx = 0,
+      by = 0;
     if (gyroOn) {
-      ax = clamp(tiltX + driftX * 0.5, -1, 1);
-      ay = clamp(tiltY + driftY * 0.5, -1, 1);
+      bx = tiltX;
+      by = tiltY;
     } else if (Math.abs(dragX) > 0.001 || Math.abs(dragY) > 0.001) {
-      ax = clamp(dragX + driftX * 0.4, -1, 1);
-      ay = clamp(dragY + driftY * 0.4, -1, 1);
+      bx = dragX;
+      by = dragY;
     } else if (interacted) {
-      ax = clamp(tgx, -1, 1);
-      ay = clamp(tgy, -1, 1);
-    } else {
-      ax = driftX;
-      ay = driftY;
+      bx = tgx;
+      by = tgy;
     }
-    if (reduceMotion) { ax = 0; ay = -0.2; }
+    const ax = clamp(bx + driftX, -1, 1);
+    const ay = clamp(by + driftY, -1, 1);
 
     gx += (ax + leanX - gx) * 0.06;
     gy += (ay - gy) * 0.06;
