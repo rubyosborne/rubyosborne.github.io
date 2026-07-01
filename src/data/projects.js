@@ -70,10 +70,8 @@ export const projects = [
     name: 'Tend Robotics',
     tag: 'Robotics · Hardware',
     accent: '#5b6b7a',
-    short:
-      'An early-stage robotics venture exploring how embodied machines can take on the physical work people would rather hand off — mechatronics meets frontier AI.',
-    long: `<p>Tend Robotics starts from a simple question: what does it take to make a capable machine you can actually trust in the real world? The focus is the embodied layer where software meets motion and perception — drawing on a mechatronics background to keep hardware, control and intelligence in one coherent design loop.</p>
-    <p>The intent is sovereign by default: systems whose behaviour is legible to their owner, built on open standards rather than locked platforms. Tend is exploratory rather than finished — a working thesis about how frontier AI should meet the physical world.</p>`,
+    short: 'A physical AI deployment that could truly ameliorate the home-care gap for the elderly.',
+    long: `<p>A physical AI deployment that could truly ameliorate the home-care gap for the elderly.</p>`,
   },
   {
     id: 'closed-loop-hydroponic-farm',
