@@ -254,6 +254,10 @@ export async function initForest() {
     label.addEventListener('mouseleave', () => activate(label, side, false));
     label.addEventListener('focus', () => activate(label, side, true));
     label.addEventListener('blur', () => activate(label, side, false));
+    // Press → brand oxblood red (persists through the mobile tap beat before nav).
+    label.addEventListener('pointerdown', () => label.classList.add('is-pressed'));
+    label.addEventListener('pointerleave', () => label.classList.remove('is-pressed'));
+    label.addEventListener('pointercancel', () => label.classList.remove('is-pressed'));
     label.addEventListener('touchend', (e) => {
       e.preventDefault();
       activate(label, side, true);

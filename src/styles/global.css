@@ -194,6 +194,18 @@ html:has(.scene) body {
   filter: brightness(1.08);
 }
 
+/* Press feedback: on click / tap the entry turns the brand oxblood red. */
+.gap-label:active .word,
+.gap-label.is-pressed .word {
+  background-image: var(--grain), linear-gradient(#6e2119, #6e2119);
+}
+.gap-label:active .word::after,
+.gap-label.is-pressed .word::after { width: 100%; background: #6e2119; }
+.gap-label:active .def,
+.gap-label.is-pressed .def { background-image: var(--grain), linear-gradient(#8a3326, #8a3326); }
+.gap-label:active .go,
+.gap-label.is-pressed .go { color: #6e2119; opacity: 1; }
+
 /* Keyboard focus ring, visible for accessibility. */
 .gap-label:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
