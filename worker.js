@@ -88,11 +88,7 @@ async function handleDeckAuth(request, env) {
   try { body = await request.json(); } catch { return json({ error: 'bad request' }, 400); }
   const secret = (env.DECK_PASSWORD || '').trim();
   const password = (body?.password || '').toString();
-  if (!secret || password !== secret) {
-    // TEMP diagnostic: exposes only whether a secret is bound + its length,
-    // never the value. Remove once the gate is confirmed working.
-    return json({ error: 'wrong password', configured: !!secret, len: secret.length }, 401);
-  }
+  if (!secret || password !== secret) return json({ error: 'wrong password' }, 401);
   const token = await sha256hex('deck:' + secret);
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
