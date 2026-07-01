@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import Base from '../layouts/Base.astro';
+import '../styles/theme.css';
 import { projects } from '../data/projects.js';
 
 const monogram = (n) =>
@@ -42,7 +43,6 @@ const items = order
 
     <header class="work-head">
       <h1>my work</h1>
-      <p class="lede">Things I've built — finance systems, robots, products and tools.</p>
     </header>
 
     <ul class="grid" id="grid">
@@ -122,159 +122,164 @@ const items = order
 </script>
 
 <style>
+  /* Body becomes the calm cream room: one daylight source (upper-left) + matte plaster. */
+  :global(body) {
+    background-color: var(--cream);
+    background-image: var(--daylight);
+    background-attachment: fixed;
+    color: var(--ink);
+  }
+  :global(body)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--plaster);
+    background-size: 220px 220px;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+  }
+
   .work {
     min-height: 100vh;
     max-width: 1180px;
     margin: 0 auto;
-    padding: clamp(1.5rem, 5vw, 4rem) clamp(1.2rem, 4vw, 2.5rem) 5rem;
-    color: #efe7da;
+    padding: clamp(2rem, 5vw, 5rem) clamp(1.5rem, 4vw, 3rem) 7rem;
+    color: var(--ink);
+    font-family: var(--sans);
   }
   .back {
     display: inline-block;
-    color: #c9a06a;
+    color: var(--clay);
     text-decoration: none;
-    font-family: '"Cormorant Garamond"', Georgia, serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.04em;
-    margin-bottom: 2.5rem;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 3rem;
   }
-  .back:hover { color: #f3ece0; }
+  .back:hover { color: var(--ox-blood); }
 
-  .work-head { margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .work-head { margin-bottom: clamp(2.5rem, 6vw, 4.5rem); }
   .work-head h1 {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(2.6rem, 8vw, 5rem);
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
     line-height: 1;
     margin: 0;
     text-transform: lowercase;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
+    color: var(--ox-blood);
   }
   .lede {
-    margin: 0.9rem 0 0;
-    max-width: 46ch;
-    color: #b6ac9c;
-    font-size: clamp(1rem, 2.4vw, 1.15rem);
-    line-height: 1.6;
+    margin: 1.1rem 0 0;
+    max-width: 48ch;
+    color: var(--taupe);
+    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+    line-height: 1.65;
   }
 
-  /* ---- Grid of cards ---- */
+  /* Cards */
   .grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: clamp(1rem, 2.5vw, 1.6rem);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
   }
+  /* ── Photo tiles: one full-bleed photo, title overlaid lower-left, quiet at rest ── */
   .card {
-    --r: 16px;
+    position: relative;
     width: 100%;
+    aspect-ratio: 4 / 5;
     text-align: left;
-    background: rgba(255, 255, 255, 0.025);
-    border: 1px solid rgba(240, 226, 200, 0.1);
-    border-radius: var(--r);
+    background: var(--bone);
+    border: 1px solid var(--hairline-soft);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     cursor: pointer;
     color: inherit;
     font: inherit;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s ease, background 0.3s ease;
+    display: block;
+    box-shadow: var(--shadow-1);
+    transition: transform 0.5s ease, box-shadow 0.45s ease;
     will-change: transform;
   }
   .card:hover,
   .card:focus-visible {
-    transform: translateY(-6px);
-    border-color: rgba(240, 226, 200, 0.28);
-    background: rgba(255, 255, 255, 0.045);
+    box-shadow: var(--shadow-2);
     outline: none;
   }
 
+  /* full-bleed media fills the tile (muted named placeholder until a photo is dropped in) */
   .media {
-    position: relative;
-    aspect-ratio: 16 / 10;
+    position: absolute;
+    inset: 0;
     background:
-      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 75%, #fff 0%), transparent 70%),
-      linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 35%, #0e0c08));
-    display: grid;
-    place-items: center;
+      var(--daylight),
+      linear-gradient(150deg, color-mix(in srgb, var(--accent) 28%, var(--bone)), color-mix(in srgb, var(--accent) 12%, var(--cream)));
     overflow: hidden;
   }
-  .media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  /* logos: contain + breathing room instead of a cropped cover */
+  .media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .card:hover .media img,
+  .card:focus-visible .media img { transform: scale(1.03); }
   .media img.logo,
   .detail-media img.logo { object-fit: contain; padding: 12%; }
-  .mono {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
-    font-size: clamp(3rem, 8vw, 4.5rem);
-    color: rgba(255, 255, 255, 0.82);
-    letter-spacing: 0.04em;
-    mix-blend-mode: soft-light;
-    user-select: none;
-  }
 
-  .badge {
+  /* understated dark scrim — transparent up top, a subtle dark at the lower edge for legible white */
+  .media::after {
+    content: '';
     position: absolute;
-    top: 0.7rem;
-    left: 0.7rem;
-    font-family: system-ui, sans-serif;
-    font-size: 0.66rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.28em 0.7em;
-    border-radius: 999px;
-    backdrop-filter: blur(6px);
-    background: rgba(14, 12, 8, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: #f3ece0;
+    inset: 0;
+    background: linear-gradient(to top, rgba(18, 10, 8, 0.55), rgba(18, 10, 8, 0.14) 32%, transparent 55%);
+    pointer-events: none;
   }
-  .badge--dev { color: #ffd98a; border-color: rgba(255, 217, 138, 0.4); }
-  .badge--training { color: #8fd0c0; border-color: rgba(143, 208, 192, 0.4); }
-  .badge--discontinued { color: #d8b6b6; }
 
-  .card-body { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
-  .tag {
-    font-family: system-ui, sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #9c917f;
+  .mono { display: none; }        /* the overlaid title names the tile now */
+  .card .badge { display: none; } /* nothing but the title at rest; status still shows when expanded */
+
+  /* title overlay, anchored lower-left */
+  .card-body {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    padding: clamp(1rem, 2.5vw, 1.4rem) clamp(1.1rem, 2.5vw, 1.5rem);
+    display: block;
+    transition: transform 0.4s ease;
   }
+  .card:hover .card-body,
+  .card:focus-visible .card-body { transform: translateY(-5px); }
+  .card-body .tag,
+  .card-body .short,
+  .card-body .cta { display: none; }
   .name {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
-    font-size: 1.5rem;
-    line-height: 1.1;
-    color: #f5efe4;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+    line-height: 1.12;
+    color: #fff;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.28);
   }
-  .short {
-    font-family: system-ui, sans-serif;
-    font-size: 0.92rem;
-    line-height: 1.55;
-    color: #b1a796;
-  }
-  .cta {
-    margin-top: 0.35rem;
-    font-family: system-ui, sans-serif;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    color: #c9a06a;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-  }
-  .card:hover .cta .arrow { transform: translateX(4px); }
-  .cta .arrow { transition: transform 0.3s ease; }
 
-  /* ---- Expand overlay ---- */
+  /* Expand overlay */
   .overlay { position: fixed; inset: 0; z-index: 100; }
   .overlay[hidden] { display: none; }
   .backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(8, 7, 4, 0.62);
-    backdrop-filter: blur(7px);
+    background: color-mix(in srgb, var(--ink) 48%, transparent);
+    backdrop-filter: blur(4px);
     opacity: 0;
   }
   .stage {
@@ -291,121 +296,121 @@ const items = order
     width: min(760px, 100%);
     max-height: 88vh;
     overflow: auto;
-    background: #15120c;
-    border: 1px solid rgba(240, 226, 200, 0.16);
-    border-radius: 20px;
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-2);
     will-change: transform, opacity;
   }
   .detail[hidden] { display: none; }
   .close {
     position: absolute;
-    top: 0.8rem;
-    right: 0.9rem;
+    top: 1rem;
+    right: 1rem;
     z-index: 3;
-    width: 2.2rem;
-    height: 2.2rem;
+    width: 2.3rem;
+    height: 2.3rem;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(14, 12, 8, 0.5);
-    backdrop-filter: blur(6px);
-    color: #f3ece0;
+    border: 1px solid var(--hairline);
+    background: color-mix(in srgb, var(--bone) 85%, transparent);
+    backdrop-filter: blur(4px);
+    color: var(--ink);
     font-size: 1.4rem;
     line-height: 1;
     cursor: pointer;
     transition: background 0.25s ease, transform 0.25s ease;
   }
-  .close:hover { background: rgba(40, 34, 24, 0.8); transform: rotate(90deg); }
+  .close:hover { background: color-mix(in srgb, var(--clay) 14%, var(--bone)); transform: rotate(90deg); }
 
   .detail-media {
     position: relative;
     aspect-ratio: 16 / 8;
     background:
-      radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--accent) 75%, #fff 0%), transparent 70%),
-      linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 35%, #0e0c08));
+      var(--daylight),
+      linear-gradient(150deg, color-mix(in srgb, var(--accent) 30%, var(--bone)), color-mix(in srgb, var(--accent) 12%, var(--cream)));
     display: grid;
     place-items: center;
     overflow: hidden;
   }
   .detail-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-  .detail-body { padding: clamp(1.4rem, 4vw, 2.4rem); }
+  .detail-body { padding: clamp(1.6rem, 4vw, 2.6rem); }
   .detail-body h2 {
-    font-family: '"Cormorant Garamond"', Georgia, serif;
+    font-family: var(--serif);
     font-weight: 500;
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-size: clamp(2.1rem, 5vw, 3.1rem);
     line-height: 1.05;
-    margin: 0.3rem 0 1.1rem;
-    color: #f6f0e5;
+    margin: 0.3rem 0 1.2rem;
+    color: var(--ox-blood);
   }
   .long :global(p) {
-    font-family: system-ui, sans-serif;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #c2b8a6;
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    line-height: 1.72;
+    color: color-mix(in srgb, var(--ink) 82%, var(--cream));
     margin: 0 0 1rem;
   }
-  .long :global(a) { color: #d9b074; text-underline-offset: 3px; }
+  .long :global(a) { color: var(--clay); text-underline-offset: 3px; }
+  .long :global(a):hover { color: var(--ox-blood); }
 
-  .actions { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .actions { margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.8rem; }
   .btn {
-    font-family: system-ui, sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.02em;
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    letter-spacing: 0.01em;
     text-decoration: none;
-    padding: 0.7em 1.1em;
-    border-radius: 10px;
-    border: 1px solid rgba(240, 226, 200, 0.28);
-    color: #f3ece0;
+    padding: 0.75em 1.2em;
+    border-radius: 12px;
+    border: 1px solid color-mix(in srgb, var(--ox-blood) 45%, transparent);
+    color: var(--ox-blood);
     cursor: pointer;
     background: transparent;
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
   }
-  .btn:hover { background: rgba(255, 255, 255, 0.06); transform: translateY(-2px); }
-  .btn--solid { background: #c9a06a; color: #1a140d; border-color: #c9a06a; font-weight: 600; }
-  .btn--solid:hover { background: #d9b074; }
+  .btn:hover { background: color-mix(in srgb, var(--ox-blood) 8%, transparent); transform: translateY(-2px); }
+  .btn--solid { background: var(--ox-blood); color: var(--bone); border-color: var(--ox-blood); font-weight: 600; }
+  .btn--solid:hover { background: var(--ox-blood-deep); }
 
-  .subscribe { margin-top: 1.6rem; }
+  .subscribe { margin-top: 1.8rem; }
   .subscribe-label {
     display: block;
-    font-family: system-ui, sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.06em;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #9c917f;
+    color: var(--taupe);
     margin-bottom: 0.6rem;
   }
   .subscribe-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
   .subscribe-input {
     flex: 1 1 220px;
-    padding: 0.7em 0.9em;
-    border-radius: 10px;
-    border: 1px solid rgba(240, 226, 200, 0.25);
-    background: rgba(255, 255, 255, 0.04);
-    color: #f3ece0;
-    font-size: 0.95rem;
-    font-family: system-ui, sans-serif;
+    padding: 0.8em 1em;
+    border-radius: 12px;
+    border: 1px solid var(--hairline);
+    background: color-mix(in srgb, var(--cream) 55%, #fff);
+    color: var(--ink);
+    font-size: 0.98rem;
+    font-family: var(--sans);
   }
-  .subscribe-input::placeholder { color: #80776a; }
-  .subscribe-input:focus { outline: none; border-color: #c9a06a; }
-  .subscribe-msg { margin: 0.7rem 0 0; font-family: system-ui, sans-serif; font-size: 0.88rem; color: #9fd0a0; min-height: 1.2em; }
-  .subscribe-msg.err { color: #e0a0a0; }
+  .subscribe-input::placeholder { color: var(--taupe); }
+  .subscribe-input:focus { outline: none; border-color: var(--ox-blood); }
+  .subscribe-msg { margin: 0.7rem 0 0; font-family: var(--sans); font-size: 0.88rem; color: #6f7a4e; min-height: 1.2em; }
+  .subscribe-msg.err { color: var(--clay); }
 
-  /* Mobile: larger, more readable type and full-width cards. */
   @media (max-width: 640px) {
-    .work-head h1 { font-size: clamp(3rem, 14vw, 4.2rem); }
-    .lede { font-size: 1.08rem; }
-    .grid { grid-template-columns: 1fr; gap: 1.1rem; }
-    .name { font-size: 1.75rem; }
+    .work-head h1 { font-size: clamp(3rem, 14vw, 4.4rem); }
+    .lede { font-size: 1.1rem; }
+    .grid { grid-template-columns: 1fr; gap: 1.3rem; }
+    .name { font-size: 1.8rem; }
     .short { font-size: 1.04rem; line-height: 1.62; }
     .tag { font-size: 0.76rem; }
     .cta { font-size: 0.92rem; }
-    .detail-body h2 { font-size: clamp(2.2rem, 9vw, 2.9rem); }
+    .detail-body h2 { font-size: clamp(2.2rem, 9vw, 3rem); }
     .long :global(p) { font-size: 1.08rem; line-height: 1.75; }
     .btn { font-size: 1rem; }
     .subscribe-input { font-size: 1.02rem; }
   }
-
   @media (max-width: 560px) {
-    .detail { border-radius: 16px; max-height: 92vh; }
+    .detail { border-radius: var(--radius); max-height: 92vh; }
   }
 </style>

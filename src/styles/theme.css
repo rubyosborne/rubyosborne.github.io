@@ -1,0 +1,60 @@
+/* =============================================================================
+   "Warm interior" style system — a single calm room.
+   Deep oxblood hero red on soft cream & bone; matte plaster; one soft daylight
+   source from the upper-left; refined serif + humanist sans; gentle diffuse
+   shadows; soft rounded corners. Tokens first, then everything uses them.
+   ============================================================================= */
+
+:root {
+  /* ── palette ─────────────────────────────────────────────── */
+  --ox-blood: #742420;       /* hero red */
+  --ox-blood-deep: #6e2119;
+  --clay: #a64232;           /* softer clay-red accent */
+  --cream: #ede7dc;          /* warm cream background */
+  --bone: #f4f0e8;           /* bone / off-white surface */
+  --ink: #2a2422;            /* warm charcoal text */
+  --taupe: #8a7e72;          /* muted secondary text */
+  --hairline: color-mix(in srgb, var(--ink) 12%, transparent);
+  --hairline-soft: color-mix(in srgb, var(--ink) 7%, transparent);
+
+  /* ── type ────────────────────────────────────────────────── */
+  --serif: '"Cormorant Garamond"', Georgia, 'Times New Roman', serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* ── soft rounded corners ────────────────────────────────── */
+  --radius: 14px;
+  --radius-lg: 16px;
+
+  /* ── gentle diffuse shadows (light from upper-left → offset right/down) ── */
+  --shadow-1: -3px 5px 16px rgba(74, 33, 25, 0.07);
+  --shadow-2: -6px 12px 34px rgba(74, 33, 25, 0.11);
+
+  /* ── one soft daylight source, upper-left ────────────────── */
+  --daylight: radial-gradient(140% 120% at 10% -10%, rgba(255, 253, 248, 0.9), rgba(237, 231, 220, 0) 55%);
+
+  /* ── subtle matte-plaster grain (used at low opacity) ────── */
+  --plaster: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+
+/* The calm room: cream ground + one daylight wash + a whisper of plaster.
+   Scoped to .room so it never touches the dark 3D landing scene. */
+.room {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--cream);
+  background-image: var(--daylight);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+.room::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--plaster);
+  background-size: 220px 220px;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+}
+.room > * { position: relative; z-index: 1; }

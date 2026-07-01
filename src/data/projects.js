@@ -62,7 +62,6 @@ export const projects = [
     long: `<p>It starts with a simple human want: to feel confident in your own skin. Tallow Lab sits at the intersection of ancestral nutrition and clean, bio-compatible skincare, built on a simple thesis — skin thrives on biologically compatible fats, and tallow is one of the most skin-identical, nutrient-dense moisturising bases there is. The range is whipped tallow balms for face and body, lightly infused with botanicals, built around minimal-ingredient formulations for low irritation and barrier repair.</p>
     <p>As a business it's direct-to-consumer (Shopify-led, with natural pull into subscription replenishment and ancestral / clean-living communities). Its edge is narrative as much as formulation: where most brands compete on synthetic actives and complex routines, Tallow Lab competes on radical simplicity and ingredient transparency — "back to what skin actually recognises." I built it end-to-end, brand to store.</p>
     <p>My co-founder has since left Auckland, and without a local manufacturing base the brand is now being sold as a complete, turnkey asset.</p>`,
-    logo: true,
     links: [{ label: 'Visit the store', href: 'https://nfvzbg-vw.myshopify.com' }],
   },
   {
@@ -94,7 +93,6 @@ export const projects = [
       "An early React app that let my sister's nutrition clients work with her directly — tracking macros and training in one place. Now retired.",
     long: `<p>Built to solve a real problem close to home, BornNutrition gave my sister's nutrition clients a shared space to log macros, follow training and stay in contact with their coach between sessions. It was one of my first real builds — a single-page React app where learning the craft and shipping something useful happened at the same time.</p>
     <p>It's since been discontinued. As my sister moved into formal university study, purpose-built academic resources covered the same ground more thoroughly, and BornNutrition was gracefully retired — a fond early marker of where the craft started.</p>`,
-    logo: true,
   },
   {
     id: 'personal-writing-style',
