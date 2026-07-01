@@ -86,9 +86,13 @@ async function sha256hex(s) {
 async function handleDeckAuth(request, env) {
   let body;
   try { body = await request.json(); } catch { return json({ error: 'bad request' }, 400); }
-  const secret = env.DECK_PASSWORD || '';
+  const secret = (env.DECK_PASSWORD || '').trim();
   const password = (body?.password || '').toString();
-  if (!secret || password !== secret) return json({ error: 'wrong password' }, 401);
+  if (!secret || password !== secret) {
+    // TEMP diagnostic: exposes only whether a secret is bound + its length,
+    // never the value. Remove once the gate is confirmed working.
+    return json({ error: 'wrong password', configured: !!secret, len: secret.length }, 401);
+  }
   const token = await sha256hex('deck:' + secret);
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
@@ -103,7 +107,7 @@ async function handleDeckAuth(request, env) {
 // otherwise bounce to the password page. (run_worker_first makes this run
 // before the static asset is served.)
 async function guardProtected(request, env) {
-  const secret = env.DECK_PASSWORD || '';
+  const secret = (env.DECK_PASSWORD || '').trim();
   const want = secret ? await sha256hex('deck:' + secret) : null;
   const m = (request.headers.get('cookie') || '').match(/(?:^|;\s*)deck_auth=([a-f0-9]+)/);
   if (want && m && m[1] === want) {
