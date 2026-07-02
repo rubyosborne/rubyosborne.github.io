@@ -142,19 +142,26 @@ import '../styles/theme.css';
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
 
       // Overlay clickable anchors for the page's external link annotations.
-      const annotations = await page.getAnnotations();
-      for (const annotation of annotations) {
-        if (annotation.subtype !== 'Link' || !annotation.url) continue;
-        const r = cssViewport.convertToViewportRectangle(annotation.rect);
-        const a = document.createElement('a');
-        a.href = annotation.url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.style.left = Math.min(r[0], r[2]) + 'px';
-        a.style.top = Math.min(r[1], r[3]) + 'px';
-        a.style.width = Math.abs(r[2] - r[0]) + 'px';
-        a.style.height = Math.abs(r[3] - r[1]) + 'px';
-        overlay.appendChild(a);
+      // Best-effort: link problems must never stop the document rendering.
+      try {
+        const annotations = await page.getAnnotations();
+        for (const annotation of annotations) {
+          if (annotation.subtype !== 'Link' || !annotation.url) continue;
+          // pdfjs v6 has no convertToViewportRectangle; map the two corners.
+          const [x1, y1] = cssViewport.convertToViewportPoint(annotation.rect[0], annotation.rect[1]);
+          const [x2, y2] = cssViewport.convertToViewportPoint(annotation.rect[2], annotation.rect[3]);
+          const a = document.createElement('a');
+          a.href = annotation.url;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.style.left = Math.min(x1, x2) + 'px';
+          a.style.top = Math.min(y1, y2) + 'px';
+          a.style.width = Math.abs(x2 - x1) + 'px';
+          a.style.height = Math.abs(y2 - y1) + 'px';
+          overlay.appendChild(a);
+        }
+      } catch {
+        // links are a nice-to-have; ignore and keep the page rendered
       }
     }
   }
