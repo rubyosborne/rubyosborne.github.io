@@ -12,6 +12,7 @@
   "dependencies": {
     "astro": "^5.0.0",
     "gsap": "^3.12.5",
+    "pdfjs-dist": "^6.1.200",
     "three": "^0.185.0"
   },
   "devDependencies": {
