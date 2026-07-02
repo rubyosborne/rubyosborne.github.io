@@ -10,4 +10,11 @@ import Scene from '../components/Scene.astro';
 <script>
   import { initForest } from '../scripts/forest3d';
   initForest();
+
+  // Dev only: a WebGPU canvas can't be re-initialised in place, so a hot
+  // update would spin up a second renderer on the same canvas and go black.
+  // Force a full page reload on HMR instead. No effect on the production build.
+  if (import.meta.hot) {
+    import.meta.hot.accept(() => window.location.reload());
+  }
 </script>
