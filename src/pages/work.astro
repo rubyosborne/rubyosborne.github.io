@@ -102,6 +102,7 @@ const items = order
             {p.email && (
               <form class="subscribe" data-project={p.id} novalidate>
                 <label class="subscribe-label" for={`email-${p.id}`}>Join the newsletter</label>
+                <p class="subscribe-note">If you're a friend of Ruby's, sign up here. Keeping it to friends means this stays a personal letter between friends, not regulated financial advice.</p>
                 <div class="subscribe-row">
                   <input id={`email-${p.id}`} class="subscribe-input" type="email" name="email" placeholder="you@email.com" required autocomplete="email" />
                   <button class="btn btn--solid" type="submit">Subscribe</button>
@@ -380,6 +381,15 @@ const items = order
     text-transform: uppercase;
     color: var(--taupe);
     margin-bottom: 0.6rem;
+  }
+  .subscribe-note {
+    font-family: var(--serif);
+    font-size: 0.98rem;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--ink);
+    max-width: 34rem;
+    margin: 0 0 0.9rem;
   }
   .subscribe-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
   .subscribe-input {
