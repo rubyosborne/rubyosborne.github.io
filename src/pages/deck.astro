@@ -109,7 +109,7 @@ import '../styles/theme.css';
     if (!pdfDoc) return;
     const token = ++renderToken;
     const targetW = availableWidth();
-    pagesEl.querySelectorAll('canvas').forEach((c) => c.remove());
+    pagesEl.querySelectorAll('.page').forEach((p) => p.remove());
 
     for (let n = 1; n <= pdfDoc.numPages; n++) {
       if (token !== renderToken) return; // a newer resize render superseded us
@@ -117,16 +117,45 @@ import '../styles/theme.css';
       const base = page.getViewport({ scale: 1 });
       const scale = targetW / base.width;
       const viewport = page.getViewport({ scale: scale * DPR });
+      const cssViewport = page.getViewport({ scale });
 
       const canvas = document.createElement('canvas');
       canvas.className = 'pdf-page';
       canvas.width = Math.floor(viewport.width);
       canvas.height = Math.floor(viewport.height);
-      canvas.style.width = Math.floor(viewport.width / DPR) + 'px';
-      canvas.style.height = Math.floor(viewport.height / DPR) + 'px';
-      pagesEl.appendChild(canvas);
+      const cssW = Math.floor(viewport.width / DPR);
+      const cssH = Math.floor(viewport.height / DPR);
+      canvas.style.width = cssW + 'px';
+      canvas.style.height = cssH + 'px';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'page';
+      wrap.style.width = cssW + 'px';
+      wrap.style.height = cssH + 'px';
+      wrap.appendChild(canvas);
+
+      const overlay = document.createElement('div');
+      overlay.className = 'links';
+      wrap.appendChild(overlay);
+      pagesEl.appendChild(wrap);
 
       await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+      // Overlay clickable anchors for the page's external link annotations.
+      const annotations = await page.getAnnotations();
+      for (const annotation of annotations) {
+        if (annotation.subtype !== 'Link' || !annotation.url) continue;
+        const r = cssViewport.convertToViewportRectangle(annotation.rect);
+        const a = document.createElement('a');
+        a.href = annotation.url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.style.left = Math.min(r[0], r[2]) + 'px';
+        a.style.top = Math.min(r[1], r[3]) + 'px';
+        a.style.width = Math.abs(r[2] - r[0]) + 'px';
+        a.style.height = Math.abs(r[3] - r[1]) + 'px';
+        overlay.appendChild(a);
+      }
     }
   }
 
@@ -277,5 +306,23 @@ import '../styles/theme.css';
     background: #fff;
     border-radius: 2px;
     box-shadow: var(--shadow-2);
+  }
+
+  /* Page wrapper + link overlay (elements are created in JS, hence :global). */
+  :global(.pages .page) { position: relative; }
+  :global(.pages .page canvas) { display: block; }
+  :global(.pages .page .links) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  :global(.pages .page .links a) {
+    position: absolute;
+    background: transparent;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  :global(.pages .page .links a:hover) {
+    background: color-mix(in srgb, var(--ox-blood) 12%, transparent);
   }
 </style>
